@@ -27,7 +27,7 @@
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 
 
-void initialize_practical_05_2_scene(Viewer& viewer)
+void initialize_snowman_scene(Viewer& viewer)
 {
     // create all shaders of this scene, then add them to the viewer
     ShaderProgramPtr flatShader
@@ -82,47 +82,41 @@ void initialize_practical_05_2_scene(Viewer& viewer)
     texPlane->setMaterial(pearl);
     viewer.addRenderable(texPlane);
 
-    // Snowman
+    // -------------- Snowman ----------------
+    // Movement Mapping
+    glm::vec3 px(0.0, 0.0, 1.0);
+    glm::vec3 pv(0.0, 0.0, 0.0);
+    float pm = 1.0, pr = 1.0;
+    DynamicSnowmanPtr snowmanMvt = std::make_shared<DynamicSnowman>( px, pv, pm, pr);
+
+    // Shape and textures
     std::string filenameBody = "../textures/snowman_body_texture.png";
     std::string filenameHead = "../textures/snowman_head_texture.png";
     std::string filenameNose = "../textures/snowman_nose_texture.png";
     std::string filenameArm = "../textures/tree_texture.png";
     std::string filenameBaseHat = "../textures/snowman_baseHat_texture.png";
     std::string filenameTopHat = "../textures/snowman_topHat_texture.png";
-    TexturedSnowmanRenderablePtr snowman = createSnowman(texShader, filenameBody, filenameHead, filenameNose, filenameArm, filenameBaseHat,filenameTopHat);
-    parentTransformation = glm::rotate(glm::translate(glm::mat4(1.0), glm::vec3(0, 4, 0.8)), -1.51f, glm::vec3(0.0, 0.0, 1.0));
-    snowman->setParentTransform(parentTransformation);
-    viewer.addRenderable(snowman);
+    TexturedSnowmanRenderablePtr snowman = createSnowman(texShader, filenameBody, filenameHead, filenameNose, filenameArm, filenameBaseHat, filenameTopHat, snowmanMvt);
+    // parentTransformation = glm::rotate(glm::translate(glm::mat4(1.0), glm::vec3(0, 4, 0.8)), -1.51f, glm::vec3(0.0, 0.0, 1.0));
+    // snowman->setParentTransform(parentTransformation);
+    // viewer.addRenderable(snowman);
 
-    //Moving bunny
-    glm::vec3 px(0.0, 0.0, 1.0);
-    glm::vec3 pv(0.0, 0.0, 1.0);
-    float pm = 1.0, pr = 1.0;
-    DynamicMeshPtr bunnyMvt = std::make_shared<DynamicMesh>( px, pv, pm, pr);
-    DynamicMeshRenderablePtr bunny =
-        std::make_shared<DynamicMeshRenderable>(
-            texShader, "../meshes/bunny.obj", "../textures/texturedBunny.png", bunnyMvt);
-    bunny->setMaterial(pearl);
-    localTransformation = glm::translate( glm::mat4(1.0), glm::vec3(0, 0, 1.0));
-    localTransformation = glm::rotate(localTransformation, float(M_PI_2), glm::vec3(1,0,0));
-    localTransformation = glm::scale(localTransformation, glm::vec3(2,2,2));
-    bunny->setLocalTransform(localTransformation);
     // viewer.addRenderable(bunny);
-    system->addParticle(bunnyMvt);
-    HierarchicalRenderable::addChild(systemRenderable, bunny);
+    system->addParticle(snowmanMvt);
+    HierarchicalRenderable::addChild(systemRenderable, snowman);
 
     //Initialize a force field that apply only to the moving bunny
     glm::vec3 nullForce(0.0, 0.0, 0.0);
-    std::vector<ParticlePtr> vBunny;
-    vBunny.push_back(bunnyMvt);
+    std::vector<ParticlePtr> vSnowman;
+    vSnowman.push_back(snowmanMvt);
 
-    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vBunny, nullForce);
+    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vSnowman, nullForce);
     system->addForceField(force);
     ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
     HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
 
     //Add a damping force field to the mobile.
-    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vBunny, 0.9);
+    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vSnowman, 0.9);
     system->addForceField(dampingForceField);
     system->setCollisionsDetection(false);
 

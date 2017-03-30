@@ -80,7 +80,6 @@ void TexturedSnowmanRenderable::do_draw()
     const glm::vec3& pPosition = m_snowman->getPosition();
     glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(pPosition));
     setParentTransform(translate);
-    std::cout << "(" << pPosition[0] << " ," << pPosition[1] << " ," << pPosition[2] << ")" << std::endl;
 
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -160,6 +159,8 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
 
     // ---------- Body -----------
     TexturedSnowmanRenderablePtr body = std::make_shared<TexturedSnowmanRenderable>(program, bodyTextureFilename, snowman);
+    parentTransformation = glm::rotate(glm::translate(glm::mat4(1.0), glm::vec3(0, 4, 0.8)), -1.51f, glm::vec3(0.0, 0.0, 1.0));
+    body->setParentTransform(parentTransformation);
     localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(1,1,0.9));
     body->setLocalTransform(localTransformation);
 
