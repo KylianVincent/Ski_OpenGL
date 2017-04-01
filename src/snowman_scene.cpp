@@ -96,9 +96,12 @@ void initialize_snowman_scene(Viewer& viewer)
     std::string filenameArm = "../textures/tree_texture.png";
     std::string filenameBaseHat = "../textures/snowman_baseHat_texture.png";
     std::string filenameTopHat = "../textures/snowman_topHat_texture.png";
-    TexturedSnowmanRenderablePtr snowman = createSnowman(texShader, filenameBody, filenameHead, filenameNose, filenameArm, filenameBaseHat, filenameTopHat, snowmanMvt);
-    // parentTransformation = glm::rotate(glm::translate(glm::mat4(1.0), glm::vec3(0, 4, 0.8)), -1.51f, glm::vec3(0.0, 0.0, 1.0));
-    // snowman->setParentTransform(parentTransformation);
+    std::string filenameSkis = "../textures/ross_hero.png";
+    std::string filenameSkiSticks = "../textures/leki_pole.png";
+    TexturedSnowmanRenderablePtr snowman = createSnowman(texShader, filenameBody, filenameHead, filenameNose, filenameArm,
+                                                         filenameBaseHat, filenameTopHat, filenameSkis, filenameSkiSticks, snowmanMvt);
+//     parentTransformation = glm::rotate(glm::translate(glm::mat4(1.0), glm::vec3(0, 4, 0.8)), -1.51f, glm::vec3(0.0, 0.0, 1.0));
+//     snowman->setParentTransform(parentTransformation);
     // viewer.addRenderable(snowman);
 
     // viewer.addRenderable(bunny);

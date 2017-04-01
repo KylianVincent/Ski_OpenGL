@@ -28,6 +28,10 @@ TexturedCubeRenderable::TexturedCubeRenderable(
     glcheck(glBufferData(GL_ARRAY_BUFFER, m_normals.size()*sizeof(glm::vec3), m_normals.data(), GL_STATIC_DRAW));
 
     // === PART 2: Texture
+    // Handle transparency
+    glcheck(glEnable(GL_BLEND));
+    glcheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
     // texture coordinates: just like any other vertex attributes!
     glGenBuffers(1, &m_tBuffer); //texture coords
     glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_tBuffer));

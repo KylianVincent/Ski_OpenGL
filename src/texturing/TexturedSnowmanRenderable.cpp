@@ -2,6 +2,7 @@
 #include "../../include/texturing/TexturedSnowmanHeadRenderable.hpp"
 #include "../../include/texturing/TexturedSnowmanNoseRenderable.hpp"
 #include "../../include/texturing/TexturedSnowmanHatRenderable.hpp"
+#include "../../include/texturing/TexturedCubeRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -116,6 +117,9 @@ void TexturedSnowmanRenderable::do_draw()
 
     // Texture and texture coordinates
     if (texCoordLocation != ShaderProgram::null_location) {
+    // Handle transparency
+    glcheck(glEnable(GL_BLEND));
+    glcheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         // Bind texture on texture unit 0
         glcheck(glActiveTexture(GL_TEXTURE0));
         glcheck(glBindTexture(GL_TEXTURE_2D, m_texId));
@@ -150,17 +154,18 @@ void TexturedSnowmanRenderable::do_animate(float time)
 {
 }
 
-TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::string& bodyTextureFilename, const
-                std::string& headTextureFilename, const std::string& noseTextureFilename, const std::string& armTextureFilename,
-                const std::string& baseHatTextureFilename, const std::string& topHatTextureFilename, const DynamicSnowmanPtr snowman) {
+TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::string& bodyTextureFilename,
+                                           const std::string& headTextureFilename, const std::string& noseTextureFilename,
+                                           const std::string& armTextureFilename,  const std::string& baseHatTextureFilename,
+                                           const std::string& topHatTextureFilename, const std::string& skiTextureFilename,
+                                           const std::string& skiStickTextureFilename, const DynamicSnowmanPtr snowman) {
 
-    //Temporary variables
+
+        //Temporary variables
     glm::mat4 parentTransformation(1.0), localTransformation(1.0);
 
     // ---------- Body -----------
     TexturedSnowmanRenderablePtr body = std::make_shared<TexturedSnowmanRenderable>(program, bodyTextureFilename, snowman);
-    parentTransformation = glm::rotate(glm::translate(glm::mat4(1.0), glm::vec3(0, 4, 0.8)), -1.51f, glm::vec3(0.0, 0.0, 1.0));
-    body->setParentTransform(parentTransformation);
     localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(1,1,0.9));
     body->setLocalTransform(localTransformation);
 
@@ -186,23 +191,102 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
 
 
     // -------- Left arm ---------
+    TexturedSnowmanHatRenderablePtr lUpperArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
+    parentTransformation = glm::mat4(1.0);
+    localTransformation = glm::mat4(1.0);
+    float lArmAngle = 1.5f;
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, -0.5, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.5f, glm::vec3(0, 0, 1));
+    parentTransformation = glm::rotate(parentTransformation, lArmAngle, glm::vec3(0, 1, 0));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
+    lUpperArm->setParentTransform(parentTransformation);
+    lUpperArm->setLocalTransform(localTransformation);
+
+    TexturedSnowmanHatRenderablePtr lLowerArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
+    parentTransformation = glm::mat4(1.0);
+    localTransformation = glm::mat4(1.0);
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
+    parentTransformation = glm::rotate(parentTransformation, -0.3f, glm::vec3(1, 0, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.4f-lArmAngle/10, glm::vec3(0, 1, 0));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
+    lLowerArm->setParentTransform(parentTransformation);
+    lLowerArm->setLocalTransform(localTransformation);
+
+    TexturedSnowmanHatRenderablePtr lSkiStick = std::make_shared<TexturedSnowmanHatRenderable>(program, skiStickTextureFilename);
+    parentTransformation = glm::mat4(1.0);
+    localTransformation = glm::mat4(1.0);
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
+    parentTransformation = glm::rotate(parentTransformation, -0.2f, glm::vec3(0, 0, 1));
+    parentTransformation = glm::rotate(parentTransformation, lArmAngle, glm::vec3(0, 1, 0));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.02, 0.02, 1.5));
+    localTransformation = glm::translate(localTransformation, glm::vec3(0, 0, 1));
+    localTransformation = glm::rotate(localTransformation, 3.14f, glm::vec3(1, 0, 0));
+    lSkiStick->setParentTransform(parentTransformation);
+    lSkiStick->setLocalTransform(localTransformation);
+
 
 
     // -------- Right arm --------
+    TexturedSnowmanHatRenderablePtr rUpperArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
+    parentTransformation = glm::mat4(1.0);
+    localTransformation = glm::mat4(1.0);
+    float rArmAngle = 1.5f;
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0.5, 0));
+    parentTransformation = glm::rotate(parentTransformation, 0.5f, glm::vec3(0, 0, 1));
+    parentTransformation = glm::rotate(parentTransformation, rArmAngle, glm::vec3(0, 1, 0));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
+    rUpperArm->setParentTransform(parentTransformation);
+    rUpperArm->setLocalTransform(localTransformation);
+
+    TexturedSnowmanHatRenderablePtr rLowerArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
+    parentTransformation = glm::mat4(1.0);
+    localTransformation = glm::mat4(1.0);
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
+    parentTransformation = glm::rotate(parentTransformation, 0.3f, glm::vec3(1, 0, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.4f-rArmAngle/10, glm::vec3(0, 1, 0));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
+    rLowerArm->setParentTransform(parentTransformation);
+    rLowerArm->setLocalTransform(localTransformation);
+
+    TexturedSnowmanHatRenderablePtr rSkiStick = std::make_shared<TexturedSnowmanHatRenderable>(program, skiStickTextureFilename);
+    parentTransformation = glm::mat4(1.0);
+    localTransformation = glm::mat4(1.0);
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
+    parentTransformation = glm::rotate(parentTransformation, 0.2f, glm::vec3(0, 0, 1));
+    parentTransformation = glm::rotate(parentTransformation, rArmAngle, glm::vec3(0, 1, 0));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.02, 0.02, 1.5));
+    localTransformation = glm::translate(localTransformation, glm::vec3(0, 0, 1));
+    localTransformation = glm::rotate(localTransformation, 3.14f, glm::vec3(1, 0, 0));
+    rSkiStick->setParentTransform(parentTransformation);
+    rSkiStick->setLocalTransform(localTransformation);
 
 
     // ----------- Hat -----------
     TexturedSnowmanHatRenderablePtr hat = std::make_shared<TexturedSnowmanHatRenderable>(program, baseHatTextureFilename);
-    parentTransformation = glm::rotate(glm::mat4(1.0), 0.2f, glm::vec3(1, 0, 0));
+    parentTransformation = glm::rotate(glm::mat4(1.0), 0.3f, glm::vec3(1, 0, 0));
     parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.4));
     localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(0.5, 0.5, 0.01));
     hat->setParentTransform(parentTransformation);
     hat->setLocalTransform(localTransformation);
 
     TexturedSnowmanHatRenderablePtr topHat = std::make_shared<TexturedSnowmanHatRenderable>(program, topHatTextureFilename);
-    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, 0.1));
     localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(0.3, 0.3, 1));
     topHat->setLocalTransform(localTransformation);
+
+    // ----------- Skis -----------
+    TexturedCubeRenderablePtr leftSki = std::make_shared<TexturedCubeRenderable>(program, skiTextureFilename);
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0.3, 0.3, -0.8));
+    parentTransformation = glm::rotate(parentTransformation, (float)-(M_PI/2), glm::vec3(0, 0, 1));
+    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(0.5,5,0.01));
+    leftSki->setParentTransform(parentTransformation);
+    leftSki->setLocalTransform(localTransformation);
+
+    TexturedCubeRenderablePtr rightSki = std::make_shared<TexturedCubeRenderable>(program, skiTextureFilename);
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0.3, -0.3, -0.8));
+    parentTransformation = glm::rotate(parentTransformation, (float)-(M_PI/2), glm::vec3(0, 0, 1));
+    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(0.5,5,0.01));
+    rightSki->setParentTransform(parentTransformation);
+    rightSki->setLocalTransform(localTransformation);
 
 
 
@@ -211,5 +295,17 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
     HierarchicalRenderable::addChild(head, nose);
     HierarchicalRenderable::addChild(head, hat);
     HierarchicalRenderable::addChild(hat, topHat);
+
+    HierarchicalRenderable::addChild(upperBody, rUpperArm);
+    HierarchicalRenderable::addChild(rUpperArm, rLowerArm);
+    HierarchicalRenderable::addChild(rLowerArm, rSkiStick);
+
+    HierarchicalRenderable::addChild(upperBody, lUpperArm);
+    HierarchicalRenderable::addChild(lUpperArm, lLowerArm);
+    HierarchicalRenderable::addChild(lLowerArm, lSkiStick);
+
+    HierarchicalRenderable::addChild(body, leftSki);
+    HierarchicalRenderable::addChild(body, rightSki);
+
     return body;
 }

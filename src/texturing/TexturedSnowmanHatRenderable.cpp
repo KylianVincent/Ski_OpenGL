@@ -9,7 +9,7 @@
 #include <math.h>
 #include <iostream>
 
-TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shaderProgram, const std::string&noseTextureFilename)
+TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shaderProgram, const std::string&hatTextureFilename)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
@@ -34,7 +34,7 @@ TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shad
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile(noseTextureFilename);
+    image.loadFromFile(hatTextureFilename);
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();

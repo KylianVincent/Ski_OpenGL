@@ -37,8 +37,10 @@ class TexturedSnowmanRenderable : public HierarchicalRenderable
 typedef std::shared_ptr<TexturedSnowmanRenderable> TexturedSnowmanRenderablePtr;
 
 
-TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::string& bodyTextureFilename, const
-                std::string& headTextureFilename, const std::string& noseTextureFilename, const std::string& armTextureFilename,
-                const std::string& baseHatTextureFilename, const std::string& topHatTextureFilename, const DynamicSnowmanPtr m_snowman);
+TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::string& bodyTextureFilename,
+                                           const std::string& headTextureFilename, const std::string& noseTextureFilename,
+                                           const std::string& armTextureFilename,  const std::string& baseHatTextureFilename,
+                                           const std::string& topHatTextureFilename, const std::string& skiTextureFilename,
+                                           const std::string& skiStickTextureFilename, const DynamicSnowmanPtr m_snowman);
 
 #endif

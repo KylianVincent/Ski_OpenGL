@@ -15,9 +15,9 @@ void teachers::getUnitCube(std::vector<glm::vec3>& positions, std::vector<glm::v
     positions.push_back(glm::vec3(0.5, 0.5, -0.5));
     positions.push_back(glm::vec3(0.5, -0.5, -0.5));
 
-    texCoords.push_back(glm::vec2(0.0,1.0));
     texCoords.push_back(glm::vec2(1.0,0.0));
-    texCoords.push_back(glm::vec2(1.0,1.0));
+    texCoords.push_back(glm::vec2(0.0,1.0));
+    texCoords.push_back(glm::vec2(0.0,0.0));
 
     normals.push_back(glm::vec3(0.0,0.0,-1.0));
     normals.push_back(glm::vec3(0.0,0.0,-1.0));
@@ -28,9 +28,9 @@ void teachers::getUnitCube(std::vector<glm::vec3>& positions, std::vector<glm::v
     positions.push_back(glm::vec3(-0.5, 0.5, -0.5));
     positions.push_back(glm::vec3(0.5, 0.5, -0.5));
 
-    texCoords.push_back(glm::vec2(0.0,1.0));
-    texCoords.push_back(glm::vec2(0.0,0.0));
     texCoords.push_back(glm::vec2(1.0,0.0));
+    texCoords.push_back(glm::vec2(1.0,1.0));
+    texCoords.push_back(glm::vec2(0.0,1.0));
 
     normals.push_back(glm::vec3(0.0,0.0,-1.0));
     normals.push_back(glm::vec3(0.0,0.0,-1.0));
