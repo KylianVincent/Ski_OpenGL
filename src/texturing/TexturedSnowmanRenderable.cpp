@@ -2,6 +2,8 @@
 #include "../../include/texturing/TexturedSnowmanHeadRenderable.hpp"
 #include "../../include/texturing/TexturedSnowmanNoseRenderable.hpp"
 #include "../../include/texturing/TexturedSnowmanHatRenderable.hpp"
+#include "../../include/texturing/TexturedSnowmanLeftArmRenderable.hpp"
+#include "../../include/texturing/TexturedSnowmanRightArmRenderable.hpp"
 #include "../../include/texturing/TexturedCubeRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
@@ -193,23 +195,15 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
 
 
     // -------- Left arm ---------
-    TexturedSnowmanHatRenderablePtr lUpperArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
-    parentTransformation = glm::mat4(1.0);
-    localTransformation = glm::mat4(1.0);
-    float lArmAngle = 1.5f;
-    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, -0.5, 0));
-    parentTransformation = glm::rotate(parentTransformation, -0.5f, glm::vec3(0, 0, 1));
-    parentTransformation = glm::rotate(parentTransformation, lArmAngle, glm::vec3(0, 1, 0));
-    localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
-    lUpperArm->setParentTransform(parentTransformation);
-    lUpperArm->setLocalTransform(localTransformation);
+    TexturedSnowmanLeftArmRenderablePtr lUpperArm = std::make_shared<TexturedSnowmanLeftArmRenderable>(program, armTextureFilename, snowman);
 
     TexturedSnowmanHatRenderablePtr lLowerArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
     parentTransformation = glm::mat4(1.0);
     localTransformation = glm::mat4(1.0);
     parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
-    parentTransformation = glm::rotate(parentTransformation, -0.3f, glm::vec3(1, 0, 0));
-    parentTransformation = glm::rotate(parentTransformation, -0.4f-lArmAngle/10, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, 0.3f, glm::vec3(1, 0, 0));
+//    parentTransformation = glm::rotate(parentTransformation, -0.4f-rArmAngle/10, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.5f, glm::vec3(0, 1, 0));
     localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
     lLowerArm->setParentTransform(parentTransformation);
     lLowerArm->setLocalTransform(localTransformation);
@@ -218,8 +212,9 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
     parentTransformation = glm::mat4(1.0);
     localTransformation = glm::mat4(1.0);
     parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
-    parentTransformation = glm::rotate(parentTransformation, -0.2f, glm::vec3(0, 0, 1));
-    parentTransformation = glm::rotate(parentTransformation, lArmAngle, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, 0.2f, glm::vec3(0, 0, 1));
+//    parentTransformation = glm::rotate(parentTransformation, rArmAngle, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, 1.52f, glm::vec3(0, 1, 0));
     localTransformation = glm::scale(localTransformation, glm::vec3(0.02, 0.02, 1.5));
     localTransformation = glm::translate(localTransformation, glm::vec3(0, 0, 1));
     localTransformation = glm::rotate(localTransformation, 3.14f, glm::vec3(1, 0, 0));
@@ -229,23 +224,15 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
 
 
     // -------- Right arm --------
-    TexturedSnowmanHatRenderablePtr rUpperArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
-    parentTransformation = glm::mat4(1.0);
-    localTransformation = glm::mat4(1.0);
-    float rArmAngle = 1.5f;
-    parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0.5, 0));
-    parentTransformation = glm::rotate(parentTransformation, 0.5f, glm::vec3(0, 0, 1));
-    parentTransformation = glm::rotate(parentTransformation, rArmAngle, glm::vec3(0, 1, 0));
-    localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
-    rUpperArm->setParentTransform(parentTransformation);
-    rUpperArm->setLocalTransform(localTransformation);
+    TexturedSnowmanRightArmRenderablePtr rUpperArm = std::make_shared<TexturedSnowmanRightArmRenderable>(program, armTextureFilename, snowman);
 
     TexturedSnowmanHatRenderablePtr rLowerArm = std::make_shared<TexturedSnowmanHatRenderable>(program, armTextureFilename);
     parentTransformation = glm::mat4(1.0);
     localTransformation = glm::mat4(1.0);
     parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
-    parentTransformation = glm::rotate(parentTransformation, 0.3f, glm::vec3(1, 0, 0));
-    parentTransformation = glm::rotate(parentTransformation, -0.4f-rArmAngle/10, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.3f, glm::vec3(1, 0, 0));
+//    parentTransformation = glm::rotate(parentTransformation, -0.4f-lArmAngle/10, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.5f, glm::vec3(0, 1, 0));
     localTransformation = glm::scale(localTransformation, glm::vec3(0.08, 0.08, 0.6));
     rLowerArm->setParentTransform(parentTransformation);
     rLowerArm->setLocalTransform(localTransformation);
@@ -254,8 +241,9 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
     parentTransformation = glm::mat4(1.0);
     localTransformation = glm::mat4(1.0);
     parentTransformation = glm::translate(parentTransformation, glm::vec3(0, 0, 0.55));
-    parentTransformation = glm::rotate(parentTransformation, 0.2f, glm::vec3(0, 0, 1));
-    parentTransformation = glm::rotate(parentTransformation, rArmAngle, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, -0.2f, glm::vec3(0, 0, 1));
+//    parentTransformation = glm::rotate(parentTransformation, lArmAngle, glm::vec3(0, 1, 0));
+    parentTransformation = glm::rotate(parentTransformation, 1.52f, glm::vec3(0, 1, 0));
     localTransformation = glm::scale(localTransformation, glm::vec3(0.02, 0.02, 1.5));
     localTransformation = glm::translate(localTransformation, glm::vec3(0, 0, 1));
     localTransformation = glm::rotate(localTransformation, 3.14f, glm::vec3(1, 0, 0));

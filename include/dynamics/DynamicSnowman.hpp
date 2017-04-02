@@ -17,10 +17,27 @@
  */
 class DynamicSnowman : public Particle
 {
-    public :
+private :
+    float m_rightArmAngle;
+    float m_leftArmAngle;
+
+public :
     DynamicSnowman(const glm::vec3& position, const glm::vec3& velocity,
             const float& mass, const float& radius, const float& angle);
+
     virtual ~DynamicSnowman();
+
+    float getLeftArmAngle() const;
+
+    float getRightArmAngle() const;
+
+    void setLeftArmAngle(float m_leftArmAngle);
+
+    void setRightArmAngle(float m_rightArmAngle);
+
+    void doRightAction(float & dt);
+
+    void doLeftAction(float & dt);
 };
 
 typedef std::shared_ptr<DynamicSnowman> DynamicSnowmanPtr;

@@ -461,7 +461,6 @@ void teachers::getUnitSphereTextured(std::vector<glm::vec3>& positions, std::vec
             texCoords[i*strips*6 + 6*j +4] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI), 0.5 + asin(d[2])/M_PI);
             d = glm::normalize(vTriangles[2] - center);
             texCoords[i*strips*6 + 6*j +5] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI), 0.5 + asin(d[2])/M_PI);
-
         }
     }
 }

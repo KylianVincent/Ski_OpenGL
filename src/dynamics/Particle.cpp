@@ -100,6 +100,10 @@ void Particle::restart()
     m_velocity = m_initialVelocity;
 }
 
+void Particle::doRightAction(float &dt) {}
+
+void Particle::doLeftAction(float &dt) {}
+
 
 std::ostream& operator<<(std::ostream& os, const ParticlePtr& p)
 {

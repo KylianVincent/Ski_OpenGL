@@ -152,6 +152,10 @@ public:
      */
     void restart();
 
+    virtual void doRightAction(float & dt);
+
+    virtual void doLeftAction(float & dt);
+
 private:
     /**@brief The initial particle's position.
      *
