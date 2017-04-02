@@ -19,7 +19,7 @@ class DynamicSnowman : public Particle
 {
     public :
     DynamicSnowman(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius);
+            const float& mass, const float& radius, const float& angle);
     virtual ~DynamicSnowman();
 };
 

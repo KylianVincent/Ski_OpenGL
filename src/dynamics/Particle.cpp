@@ -17,13 +17,14 @@ void Particle::setFixed(bool isFixed)
 }
 
 Particle::Particle(const glm::vec3 &position, const glm::vec3 &velocity,
-                   const float &mass, const float &radius)
+                   const float &mass, const float &radius, const float & angle)
     : m_initialPosition( position ), m_initialVelocity( velocity ),
     m_position(position),
     m_velocity(velocity),
     m_force(glm::vec3(0.0,0.0,0.0)),
     m_mass(mass),
-    m_radius(radius), m_isFixed( false )
+    m_radius(radius), m_isFixed( false ),
+    m_angle(angle)
 {}
 
 Particle::~Particle()
@@ -33,6 +34,10 @@ Particle::~Particle()
 const glm::vec3 & Particle::getPosition() const
 {
     return m_position;
+}
+
+const float &Particle::getAngle() const {
+    return m_angle;
 }
 
 const glm::vec3 & Particle::getVelocity() const
@@ -58,6 +63,10 @@ float Particle::getRadius() const
 void Particle::setPosition(const glm::vec3 &pos)
 {
     m_position = pos;
+}
+
+void Particle::setAngle(const float &ang) {
+    m_angle = ang;
 }
 
 void Particle::setVelocity(const glm::vec3 &vel)
@@ -91,6 +100,7 @@ void Particle::restart()
     m_velocity = m_initialVelocity;
 }
 
+
 std::ostream& operator<<(std::ostream& os, const ParticlePtr& p)
 {
     const glm::vec3& x = p->getPosition();
@@ -99,6 +109,8 @@ std::ostream& operator<<(std::ostream& os, const ParticlePtr& p)
     os << "pos (" << x[0] << ", " << x[1] << ", " << x[2] << ")";
     os << " ; ";
     os << "vel (" << v[0] << ", " << v[1] << ", " << v[2] << ")";
+    os << " ; ";
+    os << "angle :" << p->getAngle();
 
     return os;
 }

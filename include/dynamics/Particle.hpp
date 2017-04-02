@@ -28,7 +28,7 @@ public:
      * @param radius The particle radius.
      */
     Particle(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius);
+            const float& mass, const float& radius, const float &angle);
     virtual ~Particle();
 
     /**@brief Access to this particle's position.
@@ -37,6 +37,13 @@ public:
      * @return The particle's position.
      */
     const glm::vec3& getPosition() const;
+
+    /**@brief Access to this particle's angle.
+     *
+     * Get the angle of this particle.
+     * @return The particle's angle.
+     */
+    const float& getAngle() const;
 
     /**@brief Access to this particle's velocity.
      *
@@ -79,6 +86,13 @@ public:
      * @param pos The new position of this particle.
      */
     void setPosition(const glm::vec3 &pos);
+
+    /**@brief Set the particle's angle.
+     *
+     * Set the angle of this particle.
+     * @param ang The new angle of this particle.
+     */
+    void setAngle(const float &ang);
 
     /**@brief Set the particle's velocity.
      *
@@ -156,6 +170,12 @@ private:
      * The position of this particle.
      */
     glm::vec3 m_position;
+
+    /**@brief The particle's angle.
+     *
+     * The angle of this particle.
+     */
+    float m_angle;
 
     /**@brief The particle's velocity.
      *

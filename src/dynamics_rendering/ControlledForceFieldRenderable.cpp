@@ -111,6 +111,7 @@ void ControlledForceFieldRenderable::do_keyReleasedEvent(sf::Event& e)
 
 void ControlledForceFieldRenderable::do_animate(float time)
 {
+    const std::vector<ParticlePtr>& particles = m_force->getParticles();
     if (time > m_status.last_time) {
         float dt = time - m_status.last_time;
 
@@ -122,6 +123,9 @@ void ControlledForceFieldRenderable::do_animate(float time)
                 glm::vec3(cos * m_status.initial.x - sin * m_status.initial.y,
                           sin * m_status.initial.x + cos * m_status.initial.y,
                           0);
+            for (ParticlePtr p : particles) {
+                p->setAngle(m_status.angle);
+            }
         } else if (m_status.turning_right && !m_status.turning_left) {
             m_status.angle -= dt * m_status.angularSpeed;
             float cos = std::cos(m_status.angle);
@@ -130,6 +134,9 @@ void ControlledForceFieldRenderable::do_animate(float time)
                 glm::vec3(cos * m_status.initial.x - sin * m_status.initial.y,
                           sin * m_status.initial.x + cos * m_status.initial.y,
                           0);
+            for (ParticlePtr p : particles) {
+                p->setAngle(m_status.angle);
+            }
         }
 
         if (m_status.accelerating)

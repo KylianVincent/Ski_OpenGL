@@ -86,8 +86,8 @@ void initialize_snowman_scene(Viewer& viewer)
     // Movement Mapping
     glm::vec3 px(0.0, 0.0, 1.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
-    float pm = 1.0, pr = 1.0;
-    DynamicSnowmanPtr snowmanMvt = std::make_shared<DynamicSnowman>( px, pv, pm, pr);
+    float pm = 1.0, pr = 1.0, pa = 0.0;
+    DynamicSnowmanPtr snowmanMvt = std::make_shared<DynamicSnowman>( px, pv, pm, pr, pa);
 
     // Shape and textures
     std::string filenameBody = "../textures/snowman_body_texture.png";

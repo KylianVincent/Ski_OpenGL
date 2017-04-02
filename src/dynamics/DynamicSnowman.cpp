@@ -1,8 +1,8 @@
 #include "./../../include/dynamics/DynamicSnowman.hpp"
 
     DynamicSnowman::DynamicSnowman(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius)
-            : Particle(position, velocity, mass, radius) {
+            const float& mass, const float& radius, const float& angle)
+            : Particle(position, velocity, mass, radius, angle) {
 
             }
     DynamicSnowman::~DynamicSnowman()
