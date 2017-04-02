@@ -104,6 +104,10 @@ void Particle::doRightAction(float &dt) {}
 
 void Particle::doLeftAction(float &dt) {}
 
+void Particle::undoLeftAction(float &dt) {}
+
+void Particle::undoRightAction(float &dt) {}
+
 
 std::ostream& operator<<(std::ostream& os, const ParticlePtr& p)
 {

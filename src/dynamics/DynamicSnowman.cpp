@@ -33,8 +33,21 @@ void DynamicSnowman::doRightAction(float &dt) {
 //    std::cout << "D : Je baisse le bras droit ! : " << newArmAngle  << std::endl;
 }
 
+void DynamicSnowman::undoRightAction(float &dt) {
+    float newArmAngle = (float) (m_rightArmAngle - dt* 1.0);
+    m_rightArmAngle = glm::clamp(newArmAngle, 1.5f, 2.3f);
+//    std::cout << "D : Je baisse le bras droit ! : " << newArmAngle  << std::endl;
+}
+
 void DynamicSnowman::doLeftAction(float &dt) {
     float newArmAngle = (float) (m_leftArmAngle + dt* 1.0);
+    m_leftArmAngle = glm::clamp(newArmAngle, 1.5f, 2.3f);
+//    std::cout << "R : Je baisse le bras gauche ! : " << newArmAngle << std::endl;
+}
+
+
+void DynamicSnowman::undoLeftAction(float &dt) {
+    float newArmAngle = (float) (m_leftArmAngle - dt* 1.0);
     m_leftArmAngle = glm::clamp(newArmAngle, 1.5f, 2.3f);
 //    std::cout << "R : Je baisse le bras gauche ! : " << newArmAngle << std::endl;
 }

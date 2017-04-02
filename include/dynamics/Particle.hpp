@@ -156,6 +156,10 @@ public:
 
     virtual void doLeftAction(float & dt);
 
+    virtual void undoRightAction(float &dt);
+
+    virtual void undoLeftAction(float &dt);
+
 private:
     /**@brief The initial particle's position.
      *

@@ -126,6 +126,7 @@ void ControlledForceFieldRenderable::do_animate(float time)
             for (ParticlePtr p : particles) {
                 p->setAngle(m_status.angle);
                 p->doLeftAction(dt);
+                p->undoRightAction(dt);
             }
         } else if (m_status.turning_right && !m_status.turning_left) {
             m_status.angle -= dt * m_status.angularSpeed;
@@ -138,6 +139,12 @@ void ControlledForceFieldRenderable::do_animate(float time)
             for (ParticlePtr p : particles) {
                 p->setAngle(m_status.angle);
                 p->doRightAction(dt);
+                p->undoLeftAction(dt);
+            }
+        } else {
+            for (ParticlePtr p : particles) {
+                p->undoLeftAction(dt);
+                p->undoRightAction(dt);
             }
         }
 

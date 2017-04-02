@@ -38,6 +38,10 @@ public :
     void doRightAction(float & dt);
 
     void doLeftAction(float & dt);
+
+    void undoRightAction(float &dt);
+
+    void undoLeftAction(float &dt);
 };
 
 typedef std::shared_ptr<DynamicSnowman> DynamicSnowmanPtr;
