@@ -5,6 +5,7 @@
 
 // forward declararion of scene building functions, in separate files
 void initialize_snowman_scene(Viewer& viewer);
+void initialize_ground_scene(Viewer& viewer);
 
 
 int main(int argc, char* argv[])
@@ -21,8 +22,17 @@ int main(int argc, char* argv[])
             exit(EXIT_FAILURE);
         }
     }
-
-    initialize_snowman_scene(viewer);
+ switch (scene_to_load) {
+        case 1:
+            initialize_snowman_scene(viewer);
+            break;
+        case 2:
+            initialize_ground_scene(viewer);
+            break;
+        default:
+            LOG(fatal, "unknown practical number " << scene_to_load);
+            exit(EXIT_FAILURE);
+    }
 
     while (viewer.isRunning()) {
         viewer.handleEvent();
