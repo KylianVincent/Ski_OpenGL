@@ -50,7 +50,7 @@ Viewer::Viewer(float width, float height) :
     },
     m_startTime{},
     m_modeInformationTextDisappearanceTime{ clock::now() + g_modeInformationTextTimeout },
-    m_modeInformationText{ "Arcball Camera Activated" },
+    m_modeInformationText{ "Auto Camera Activated" },
     m_applicationRunning{ true }, m_animationLoop{ false }, m_animationIsStarted{ false },
     m_loopDuration{0}, m_simulationTime{0},
     m_screenshotCounter{0}, m_helpDisplayed{false},
@@ -89,10 +89,16 @@ static const std::string g_help_message =
 "      [F3]  Reload all managed shader program from their sources\n"
 "      [F4]  Pause/Stop the animation\n"
 "      [F5]  Reset the animation\n"
-"       [c]  Switch the camera mode between Arcball / Space ship\n"
+"       [c]  Switch the camera mode between Auto / Arcball / Space ship\n"
 "[ctrl]+[w]  Quit the application\n"
 "\n"
+"GAME CONTROLS\n"
+"  Use the arrow keys to move on the snow\n"
+"\n"
 "CAMERA CONTROL:\n"
+"  Default Auto game mode : following the snowman\n"
+"\n"
+"  Other modes :\n"
 "  Right click to change the camera orientation\n"
 "  * Arcball mode\n"
 "    Use the wheel to change the zoom\n"
@@ -432,15 +438,20 @@ void Viewer::takeScreenshot()
 
 void Viewer::changeCameraMode()
 {
-    if( m_camera.getMouseBehavior() == Camera::ARCBALL_BEHAVIOR )
+    if ( m_camera.getMouseBehavior() == Camera::AUTO_BEHAVIOR )
+    {
+        m_camera.setMouseBehavior( Camera::ARCBALL_BEHAVIOR );
+        m_modeInformationText = "Arcball Camera Activated";
+    }
+    else if( m_camera.getMouseBehavior() == Camera::ARCBALL_BEHAVIOR )
     {
         m_camera.setMouseBehavior( Camera::SPACESHIP_BEHAVIOR );
         m_modeInformationText = "Spaceship Camera Activated";
     }
     else
     {
-        m_camera.setMouseBehavior( Camera::ARCBALL_BEHAVIOR );
-        m_modeInformationText = "Arcball Camera Activated";
+        m_camera.setMouseBehavior( Camera::AUTO_BEHAVIOR );
+        m_modeInformationText = "Auto Camera Activated";
     }
     m_modeInformationTextDisappearanceTime = clock::now() + g_modeInformationTextTimeout;
 }

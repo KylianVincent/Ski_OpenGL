@@ -242,6 +242,8 @@ public:
      * This enumeration specifies the different kind of reaction to a mouse displacement.
      */
     enum CAMERA_MOUSE_BEHAVIOR {
+      /** The view matrix is modified with regards to the guiding renderable movement automatically. */
+      AUTO_BEHAVIOR,
       /** The view matrix is modified to turn the camera around the world origin.*/
       ARCBALL_BEHAVIOR,
       /** The view matrix is modified to point its 'nose' in the direction pointed by the mouse. */
