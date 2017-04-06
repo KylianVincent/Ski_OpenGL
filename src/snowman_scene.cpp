@@ -121,8 +121,8 @@ void initialize_snowman_scene(Viewer& viewer)
     system->setCollisionsDetection(false);
 
     // Add the gravity force field
-    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
-    system->addForceField(gravityForceField);
+    // ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
+    // system->addForceField(gravityForceField);
 
 
     // Position the camera with regards to the skiing snowman, it's then animated
