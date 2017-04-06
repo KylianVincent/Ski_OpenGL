@@ -632,50 +632,65 @@ void teachers::getUnitConeTextured(std::vector<glm::vec3>& positions, std::vecto
             double factor2 = (height-next_u)/height;
 
             positions[i*strips*6 + 6*j +0] = center + glm::vec3(factor1*radius*cos(curr_theta),
-                    factor1*radius*sin(curr_theta),
-                    curr_u);
+                                                                factor1*radius*sin(curr_theta),
+                                                                curr_u);
             positions[i*strips*6 + 6*j +1] = center + glm::vec3(factor1*radius*cos(next_theta),
-                    factor1*radius*sin(next_theta),
-                    curr_u);
+                                                                factor1*radius*sin(next_theta),
+                                                                curr_u);
             positions[i*strips*6 + 6*j +2] = center + glm::vec3(factor2*radius*cos(next_theta),
-                    factor2*radius*sin(next_theta),
-                    next_u);
+                                                                factor2*radius*sin(next_theta),
+                                                                next_u);
+
+            glm::vec3 d = glm::normalize(positions[i*strips*6 + 6*j + 0] - center);
+            texCoords[i*strips*6 + 6*j + 0] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI),
+                                                        1 - factor1);
+            d = glm::normalize(positions[i*strips*6 + 6*j + 1] - center);
+            texCoords[i*strips*6 + 6*j + 1] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI),
+                                                        1 - factor1);
+            d = glm::normalize(positions[i*strips*6 + 6*j + 2] - center);
+            texCoords[i*strips*6 + 6*j + 2] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI),
+                                                        1 - factor2);
 
             normals[i*strips*6 + 6*j +0] = glm::normalize(glm::vec3(cos(curr_theta),
-                        sin(curr_theta),
-                        curr_u));
+                                                                    sin(curr_theta),
+                                                                    curr_u));
             normals[i*strips*6 + 6*j +1] = glm::normalize(glm::vec3(cos(next_theta),
-                        sin(next_theta),
-                        curr_u));
+                                                                    sin(next_theta),
+                                                                    curr_u));
             normals[i*strips*6 + 6*j +2] = glm::normalize(glm::vec3(cos(next_theta),
-                        sin(next_theta),
-                        next_u));
+                                                                    sin(next_theta),
+                                                                    next_u));
 
             positions[i*strips*6 + 6*j +3] = center + glm::vec3(factor1*radius*cos(curr_theta),
-                    factor1*radius*sin(curr_theta),
-                    curr_u);
+                                                                factor1*radius*sin(curr_theta),
+                                                                curr_u);
             positions[i*strips*6 + 6*j +4] = center + glm::vec3(factor2*radius*cos(next_theta),
-                    factor2*radius*sin(next_theta),
-                    next_u);
+                                                                factor2*radius*sin(next_theta),
+                                                                next_u);
             positions[i*strips*6 + 6*j +5] = center + glm::vec3(factor2*radius*cos(curr_theta),
-                    factor2*radius*sin(curr_theta),
-                    next_u);
+                                                                factor2*radius*sin(curr_theta),
+                                                                next_u);
+
+            d = glm::normalize(positions[i*strips*6 + 6*j + 3] - center);
+            texCoords[i*strips*6 + 6*j + 3] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI),
+                                                        1 - factor1);
+            d = glm::normalize(positions[i*strips*6 + 6*j + 4] - center);
+            texCoords[i*strips*6 + 6*j + 4] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI),
+                                                        1 - factor2);
+            d = glm::normalize(positions[i*strips*6 + 6*j + 5] - center);
+            texCoords[i*strips*6 + 6*j + 5] = glm::vec2(0.5 + atan2(d[1], d[0])/(2*M_PI),
+                                                        1 - factor2);
 
             normals[i*strips*6 + 6*j +3] = glm::normalize(glm::vec3(cos(curr_theta),
-                        sin(curr_theta),
-                        curr_u));
+                                                                    sin(curr_theta),
+                                                                    curr_u));
             normals[i*strips*6 + 6*j +4] = glm::normalize(glm::vec3(cos(next_theta),
-                        radius*sin(next_theta),
-                        next_u));
+                                                                    radius*sin(next_theta),
+                                                                    next_u));
             normals[i*strips*6 + 6*j +5] = glm::normalize(glm::vec3(cos(curr_theta),
-                        radius*sin(curr_theta),
-                        next_u));
+                                                                    radius*sin(curr_theta),
+                                                                    next_u));
 
-            for (int tex = 0; tex < 6; tex++) {
-                glm::vec3 d = glm::normalize(positions[i*strips*6 + 6*j + tex] - center);
-                texCoords[i*strips*6 + 6*j + tex] = glm::vec2(0.5 + factor1*radius*acos(d[0]),
-                    0.5 - factor1*radius*asin(d[1]));
-            }
         }
     }
 
