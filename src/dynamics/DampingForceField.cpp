@@ -1,9 +1,10 @@
 #include "./../../include/dynamics/DampingForceField.hpp"
 
-DampingForceField::DampingForceField(const std::vector<ParticlePtr> particles, const float damping)
+DampingForceField::DampingForceField(const std::vector<ParticlePtr> particles, const float damping, const float perpendicularDamping)
 {
     m_particles = particles;
     m_damping = damping;
+    m_perpendicularDamping = perpendicularDamping;
 }
 
 DampingForceField::~DampingForceField()
@@ -12,9 +13,20 @@ DampingForceField::~DampingForceField()
 
 void DampingForceField::do_addForce()
 {
-    for (ParticlePtr p : m_particles) {
-        p->incrForce(-m_damping*p->getVelocity());
+  float dotProduct = 1;
+  glm::vec3 planarVelocity;
+  for (ParticlePtr p : m_particles) {
+    planarVelocity = glm::vec3(p->getVelocity()[0], p->getVelocity()[1], 0);
+    if (glm::length(planarVelocity) < 0.5) {
+      std::cout << "JEPASSE" << std::endl;
+      dotProduct = 1;
+    } else {
+      dotProduct = std::abs(glm::dot(glm::normalize(glm::vec3(p->getVelocity()[0], p->getVelocity()[1], 0)), glm::normalize(glm::vec3(cos(p->getAngle()), sin(p->getAngle()), 0))));
     }
+    std::cout << dotProduct << std::endl;
+    std::cout << "glm::vec3(" << p->getVelocity()[0] << ", " << p->getVelocity()[1] << ", 0)), glm::normalize(glm::vec3(" << cos(p->getAngle()) << ", " << sin(p->getAngle()) << ", 0))))" << std::endl;
+    p->incrForce(-m_damping*p->getVelocity() -m_perpendicularDamping*(1-dotProduct)*p->getVelocity());
+  }
 }
 
 const std::vector<ParticlePtr> DampingForceField::getParticles()

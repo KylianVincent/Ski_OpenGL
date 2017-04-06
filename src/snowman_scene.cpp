@@ -70,20 +70,29 @@ void initialize_snowman_scene(Viewer& viewer)
     DirectionalLightPtr directionalLight = std::make_shared<DirectionalLight>(d_direction, d_ambient, d_diffuse, d_specular);
     viewer.setDirectionalLight(directionalLight);
 
-
-    //Textured plane
+    // ---------- Textured plane -------------
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
-    parentTransformation = glm::scale(glm::mat4(1.0), glm::vec3(30.0,30.0,30.0));
+    //parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(10, 0, 5));
+    float planeRotation = (float)M_PI/8.0f;
+    parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,30.0,30.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(pearl);
     viewer.addRenderable(texPlane);
+    // We add this textured plane as an obstacle
+    glm::vec3 planeNormal(sin(planeRotation), 0, cos(planeRotation));
+    glm::vec3 planePoint(0, 0, 0);
+    PlanePtr ground = std::make_shared<Plane>(planeNormal, planePoint);
+    system->addPlaneObstacle(ground);
 
     // -------------- Snowman ----------------
     // Movement Mapping
-    glm::vec3 px(0.0, 0.0, 1.0);
+    glm::vec3 px(0.0, 0.0, 10.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
-    float pm = 1.0, pr = 1.0, pa = 0.0;
+    float pm = 1.0, pr, pa = 0.0;
+    // Particle radius depends on the snowman
+    pr = 0.9;
     DynamicSnowmanPtr snowmanMvt = std::make_shared<DynamicSnowman>( px, pv, pm, pr, pa);
 
     // Shape and textures
@@ -111,13 +120,19 @@ void initialize_snowman_scene(Viewer& viewer)
     HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
 
     // Add a damping force field to the mobile and enable the collisions
-    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vSnowman, 0.9);
+    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vSnowman, 0.9, 5);
     system->addForceField(dampingForceField);
-    system->setCollisionsDetection(false);
+    system->setCollisionsDetection(true);
+    // Initialize the restitution coefficient for collision
+    // Snow is soft
+    system->setRestitution(0.3f);
+
+    // Add a friction force if the snowman's skis aren't aligned with it's speed direction
+
 
     // Add the gravity force field
-    // ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
-    // system->addForceField(gravityForceField);
+    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
+    system->addForceField(gravityForceField);
 
 
     // Position the camera with regards to the skiing snowman, it's then animated

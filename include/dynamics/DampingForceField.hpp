@@ -19,7 +19,7 @@ public:
      * to a particle of velocity v is -damping * v.
      * @param particles Set of particles influenced by this damping force.
      * @param damping Damping coefficient. */
-    DampingForceField(const std::vector<ParticlePtr> particles, const float damping);
+    DampingForceField(const std::vector<ParticlePtr> particles, const float damping, const float perpendicularDamping);
     virtual ~DampingForceField();
 
     /**@brief Access to the particles influenced by this force field.
@@ -51,10 +51,25 @@ public:
      */
     void setDamping(const float& damping);
 
+    /**@brief Access to the perpendicular damping factor.
+     *
+     * Get the perpendicular damping factor of this force field.
+     * @return The perpendicularDamping factor of this.
+     */
+    const float& getPerpendicularDamping();
+
+    /**@brief Set the perpendicular damping factor of this force field.
+     *
+     * Define the perpendicular damping factor of this damping force field.
+     * @param perpendicularDamping The new damping factor.
+     */
+    void setPerpendicularDamping(const float& perpendicularDamping);
+
 private:
     void do_addForce();
     std::vector<ParticlePtr> m_particles;
     float m_damping;
+    float m_perpendicularDamping;
 };
 
 typedef std::shared_ptr<DampingForceField> DampingForceFieldPtr;
