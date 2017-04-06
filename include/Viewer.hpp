@@ -9,6 +9,7 @@
  */
 
 #include "Renderable.hpp"
+#include "./dynamics/Particle.hpp"
 #include "Camera.hpp"
 #include "lighting/Lights.hpp"
 #include "TextEngine.hpp"
@@ -134,6 +135,18 @@ public:
      * Access to the camera used to render the scene in the viewer.
      * @return A reference to the viewer's camera. */
     Camera& getCamera();
+
+
+    /**@brief Get the renderable that guides the camera.
+     *
+     * Access to the renderable used to compute the orientation and aim of the camera.
+     * @return A reference to the guiding renderable. */
+    ParticlePtr& getGuidingRenderable();
+
+    /**@brief Set the renderable that guides the camera.
+     *
+     * Set the renderable used to compute the orientation and aim of the camera.*/
+    void setGuidingRenderable(ParticlePtr guider);
 
     /**@brief Get the world coordinate of a window point.
      *
@@ -266,6 +279,7 @@ private:
     sf::RenderWindow m_window; /*!< Pointer to the render window. */
     std::unordered_set< RenderablePtr > m_renderables; /*!< Set of renderables that the viewer displays. */
     TimePoint m_startTime; /*!< Time at the animation start in TimePoint format. */
+    ParticlePtr m_guidingRenderable;
 
     // Practical 4 add-ons: lights
     DirectionalLightPtr m_directionalLight; /*!< Pointer to a directional light. */

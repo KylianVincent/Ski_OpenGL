@@ -18,8 +18,26 @@ Camera::~Camera()
 
 }
 
-void Camera::animate(float time)
+void Camera::animate(float time, ParticlePtr guidingRenderable)
 {
+    // If there isn't any guiding renderable, there isn't any to follow, so there
+    // isn't any animation
+    if (guidingRenderable == NULL){
+        return;
+    }
+    glm::vec3 px = guidingRenderable->getPosition();
+    // Using velocity
+    glm::vec3 visionAngle;
+    glm::vec3 velocity = guidingRenderable->getVelocity();
+    if (glm::length(velocity) < 0.5) {
+        // visionAngle = 8.0f*glm::vec3(-cos(guidingRenderable->getAngle()), -sin(guidingRenderable->getAngle()), 1) + px;
+        velocity = glm::vec3 (1.0, 0, 0);
+    } //else {
+    visionAngle = -8.0f*glm::normalize(velocity) + glm::vec3(0, 0, 8) + px;
+    // }
+    // Using position direction
+    // glm::vec3 visionAngle = 8.0f*glm::vec3(-cos(guidingRenderable->getAngle()), -sin(guidingRenderable->getAngle()), 1) + px;
+    setViewMatrix( glm::lookAt(visionAngle, px, glm::vec3( 0, 0, 1 ) ) );
 }
 
 const glm::mat4& Camera::viewMatrix() const

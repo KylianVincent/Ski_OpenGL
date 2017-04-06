@@ -54,7 +54,8 @@ Viewer::Viewer(float width, float height) :
     m_applicationRunning{ true }, m_animationLoop{ false }, m_animationIsStarted{ false },
     m_loopDuration{0}, m_simulationTime{0},
     m_screenshotCounter{0}, m_helpDisplayed{false},
-    m_lastEventHandleTime{ clock::now() }
+    m_lastEventHandleTime{ clock::now() },
+    m_guidingRenderable{NULL}
 {
     sf::ContextSettings settings = m_window.getSettings();
     LOG( info, "Settings of OPENGL Context created by SFML");
@@ -168,7 +169,7 @@ void Viewer::animate()
         for(RenderablePtr r : m_renderables)
             r->animate( getTime() );
 
-        m_camera.animate( getTime() );
+        m_camera.animate(getTime() , m_guidingRenderable);
     }
 }
 
@@ -468,6 +469,14 @@ void Viewer::reloadShaderPrograms()
 Camera& Viewer::getCamera()
 {
     return m_camera;
+}
+
+ParticlePtr& Viewer::getGuidingRenderable() {
+    return m_guidingRenderable;
+}
+
+void Viewer::setGuidingRenderable(ParticlePtr guider) {
+    m_guidingRenderable = guider;
 }
 
 glm::vec3 Viewer::windowToWorld( const glm::vec3& windowCoordinate )

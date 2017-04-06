@@ -51,9 +51,6 @@ void initialize_snowman_scene(Viewer& viewer)
     FrameRenderablePtr frame = std::make_shared<FrameRenderable>(flatShader);
     viewer.addRenderable(frame);
 
-    //Position the camera
-    viewer.getCamera().setViewMatrix( glm::lookAt( glm::vec3(0, -8, 8 ), glm::vec3(0, 0, 0), glm::vec3( 0, 0, 1 ) ) );
-
     //Initialize a dynamic system (Solver, Time step, Restitution coefficient)
     DynamicSystemPtr system = std::make_shared<DynamicSystem>();
     EulerExplicitSolverPtr solver = std::make_shared<EulerExplicitSolver>();
@@ -77,7 +74,7 @@ void initialize_snowman_scene(Viewer& viewer)
     //Textured plane
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
-    parentTransformation = glm::scale(glm::mat4(1.0), glm::vec3(10.0,10.0,10.0));
+    parentTransformation = glm::scale(glm::mat4(1.0), glm::vec3(30.0,30.0,30.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(pearl);
     viewer.addRenderable(texPlane);
@@ -108,7 +105,7 @@ void initialize_snowman_scene(Viewer& viewer)
     system->addParticle(snowmanMvt);
     HierarchicalRenderable::addChild(systemRenderable, snowman);
 
-    //Initialize a force field that apply only to the moving bunny
+    // Initialize a force field that apply only to the moving snowman
     glm::vec3 nullForce(0.0, 0.0, 0.0);
     std::vector<ParticlePtr> vSnowman;
     vSnowman.push_back(snowmanMvt);
@@ -118,11 +115,20 @@ void initialize_snowman_scene(Viewer& viewer)
     ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
     HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
 
-    //Add a damping force field to the mobile.
+    // Add a damping force field to the mobile and enable the collisions
     DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vSnowman, 0.9);
     system->addForceField(dampingForceField);
     system->setCollisionsDetection(false);
 
+    // Add the gravity force field
+    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
+    system->addForceField(gravityForceField);
 
+
+    // Position the camera with regards to the skiing snowman, it's then animated
+    // using its velocity and position
+    viewer.getCamera().setViewMatrix( glm::lookAt( glm::vec3(-8, 0, 8 ) + px, px, glm::vec3( 0, 0, 1 ) ) );
+    // Control it by the snowman
+    viewer.setGuidingRenderable(snowmanMvt);
     viewer.startAnimation();
 }

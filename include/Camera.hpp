@@ -7,7 +7,7 @@
  * Define a camera object to ease the manipulation of the view matrix by user
  * input such as the keyboard of the mouse.
  */
-
+#include "./dynamics/Particle.hpp"
 #include <glm/glm.hpp>
 /**@brief Manage the Camera.
  *
@@ -58,7 +58,7 @@ public:
      * behavior here. This function is automatically called by the Viewer
      * @param time Current simulation time.
      */
-    void animate( float time );
+    void animate(float time, ParticlePtr guidingRenderable);
 
     /**
      * @name Camera View Matrix

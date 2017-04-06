@@ -48,19 +48,19 @@ ControlledForceFieldRenderable::ControlledForceFieldRenderable(ShaderProgramPtr 
     m_status = ControlledForceFieldStatus(initial_direction);
 
     //Create geometric data to display an arrow representing the movement of the particle
-    const std::vector<ParticlePtr>& particles = m_force->getParticles();
-    m_positions.clear();
-    m_colors.clear();
-    m_normals.clear();
-
-    for (ParticlePtr p : particles) {
-        m_positions.push_back(p->getPosition());
-        m_positions.push_back(p->getPosition() + m_status.movement);
-        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
-        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
-        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
-        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
-    }
+    // const std::vector<ParticlePtr>& particles = m_force->getParticles();
+    // m_positions.clear();
+    // m_colors.clear();
+    // m_normals.clear();
+    //
+    // for (ParticlePtr p : particles) {
+    //     m_positions.push_back(p->getPosition());
+    //     m_positions.push_back(p->getPosition() + m_status.movement);
+    //     m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+    //     m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+    //     m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+    //     m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+    // }
 
     //Create buffers
     glGenBuffers(1, &m_pBuffer); //vertices
