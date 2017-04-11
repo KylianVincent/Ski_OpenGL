@@ -23,7 +23,8 @@ private :
 
 public :
     DynamicSnowman(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius, const float& angle);
+            const float& mass, const float& radius, const float& angle,
+            const float& xAngle = 0.0, const float& yAngle = 0.0);
 
     virtual ~DynamicSnowman();
 

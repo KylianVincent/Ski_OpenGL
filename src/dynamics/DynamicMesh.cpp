@@ -1,8 +1,9 @@
 #include "./../../include/dynamics/DynamicMesh.hpp"
 
     DynamicMesh::DynamicMesh(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius, const float& angle)
-            : Particle(position, velocity, mass, radius, angle) {
+            const float& mass, const float& radius, const float& angle,
+            const float& xAngle, const float& yAngle)
+            : Particle(position, velocity, mass, radius, angle, xAngle, yAngle) {
 
             }
     DynamicMesh::~DynamicMesh()

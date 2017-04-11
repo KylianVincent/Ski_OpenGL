@@ -54,10 +54,10 @@ TexturedSnowmanRenderable::TexturedSnowmanRenderable(ShaderProgramPtr shaderProg
     glcheck(glBindTexture(GL_TEXTURE_2D, m_texId));
 
     // texture options
-    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    // glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
     glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    // glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    // glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
     // Transfer the texture image texture to the GPU
     glcheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F,
@@ -83,6 +83,7 @@ void TexturedSnowmanRenderable::do_draw()
     const glm::vec3& pPosition = m_snowman->getPosition();
     glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(pPosition));
     glm::mat4 rotate = glm::rotate(translate, m_snowman->getAngle(), glm::vec3(0, 0, 1));
+    rotate = glm::rotate(rotate, m_snowman->getYAngle(), glm::vec3(0, 1, 0));
     setParentTransform(rotate);
 
     //Locations
@@ -157,6 +158,11 @@ void TexturedSnowmanRenderable::do_animate(float time)
 {
 }
 
+void TexturedSnowmanRenderable::setMaterial(const MaterialPtr& material)
+{
+    m_material = material;
+}
+
 TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::string& bodyTextureFilename,
                                            const std::string& headTextureFilename, const std::string& noseTextureFilename,
                                            const std::string& armTextureFilename,  const std::string& baseHatTextureFilename,
@@ -171,7 +177,6 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
     TexturedSnowmanRenderablePtr body = std::make_shared<TexturedSnowmanRenderable>(program, bodyTextureFilename, snowman);
     localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(1,1,0.9));
     body->setLocalTransform(localTransformation);
-    body->setParentTransform(parentTransformation);
 
     TexturedSnowmanHeadRenderablePtr upperBody = std::make_shared<TexturedSnowmanHeadRenderable>(program, bodyTextureFilename);
     parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, 1));

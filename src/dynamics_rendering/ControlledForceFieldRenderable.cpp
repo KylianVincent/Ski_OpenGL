@@ -117,6 +117,7 @@ void ControlledForceFieldRenderable::do_animate(float time)
 
         if (m_status.turning_left && !m_status.turning_right) {
             m_status.angle += dt * m_status.angularSpeed;
+            m_status.angle = fmod(m_status.angle, 2*M_PI);
             float cos = std::cos(m_status.angle);
             float sin = std::sin(m_status.angle);
             m_status.movement =
@@ -130,6 +131,7 @@ void ControlledForceFieldRenderable::do_animate(float time)
             }
         } else if (m_status.turning_right && !m_status.turning_left) {
             m_status.angle -= dt * m_status.angularSpeed;
+            m_status.angle = fmod(m_status.angle, 2*M_PI);
             float cos = std::cos(m_status.angle);
             float sin = std::sin(m_status.angle);
             m_status.movement =

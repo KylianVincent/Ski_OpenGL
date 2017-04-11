@@ -107,6 +107,7 @@ void initialize_snowman_scene(Viewer& viewer)
     TexturedSnowmanRenderablePtr snowman = createSnowman(texShader, filenameBody, filenameHead, filenameNose, filenameArm,
                                                          filenameBaseHat, filenameTopHat, filenameSkis, filenameSkiSticks, snowmanMvt);
     system->addParticle(snowmanMvt);
+    snowman->setMaterial(pearl);
     HierarchicalRenderable::addChild(systemRenderable, snowman);
 
     // Initialize a force field that apply only to the moving snowman
