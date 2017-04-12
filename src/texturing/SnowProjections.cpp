@@ -9,15 +9,16 @@
 #include <math.h>
 #include <iostream>
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
-SnowProjections::SnowProjections(ShaderProgramPtr shaderProgram, const std::string&snowProjectionsTextureFilename,
+SnowProjections::SnowProjections(ShaderProgramPtr shaderProgram, const std::string&noseTextureFilename,
         ParticlePtr particle)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0),
           m_particle(particle)
 {
 
-    teachers::getUnitConeTextured(m_positions, m_normals, m_texCoords, 10, 10);
+    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 10);
 
     m_model = glm::mat4(1.0);
 
@@ -37,7 +38,7 @@ SnowProjections::SnowProjections(ShaderProgramPtr shaderProgram, const std::stri
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile(snowProjectionsTextureFilename);
+    image.loadFromFile(noseTextureFilename);
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -140,9 +141,9 @@ void SnowProjections::do_draw()
 void SnowProjections::do_animate(float time)
 {
     float dt = time - m_previousTime;
-    float newAngle = fmod(m_previousAngle + glm::length(m_particle->getVelocity())*dt, 2*M_PI);
-//    glm::mat4 localTransform = glm::rotate(glm::mat4(1.0), newAngle, glm::vec3(0, 0, 1));
-//    setLocalTransform(localTransform);
+    glm::vec3 planarVelocity = glm::vec3(m_particle->getVelocity()[0], m_particle->getVelocity()[1], 0);
+    float newAngle = m_previousAngle + glm::length(planarVelocity)*0.0001f*dt;
+    glm::mat4 localTransform = glm::rotate(glm::mat4(1.0), -newAngle, glm::vec3(0, 1, 0));
+    setLocalTransform(localTransform);
     m_previousAngle = newAngle;
-    std::cout << "newAngle = " << newAngle << std::endl;
 }

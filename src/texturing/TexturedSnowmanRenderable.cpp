@@ -289,8 +289,9 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
 
     // --- Snow projections on skis ---
     SnowProjectionsPtr snowProj = std::make_shared<SnowProjections>(program, snowProjectionsTextureFilename, snowman);
-    parentTransformation = glm::rotate(glm::mat4(1.0), (float)-(M_PI/2), glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(1, 1, 2));
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(-1.1, 0, -0.9));
+    parentTransformation = glm::rotate(parentTransformation, (float)-(M_PI/2), glm::vec3(0, 1, 0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(0.2, 0.9, 2.5));
     snowProj->setParentTransform(parentTransformation);
 
     HierarchicalRenderable::addChild(body, upperBody);
