@@ -5,6 +5,7 @@
 #include "../../include/texturing/TexturedSnowmanLeftArmRenderable.hpp"
 #include "../../include/texturing/TexturedSnowmanRightArmRenderable.hpp"
 #include "../../include/texturing/TexturedCubeRenderable.hpp"
+#include "../../include/texturing/SnowProjections.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -167,7 +168,9 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
                                            const std::string& headTextureFilename, const std::string& noseTextureFilename,
                                            const std::string& armTextureFilename,  const std::string& baseHatTextureFilename,
                                            const std::string& topHatTextureFilename, const std::string& skiTextureFilename,
-                                           const std::string& skiStickTextureFilename, const DynamicSnowmanPtr snowman) {
+                                           const std::string& skiStickTextureFilename,
+                                           const std::string& snowProjectionsTextureFilename,
+                                           const DynamicSnowmanPtr snowman) {
 
 
         //Temporary variables
@@ -284,6 +287,11 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
     rightSki->setLocalTransform(localTransformation);
 
 
+    // --- Snow projections on skis ---
+    SnowProjectionsPtr snowProj = std::make_shared<SnowProjections>(program, snowProjectionsTextureFilename, snowman);
+    parentTransformation = glm::rotate(glm::mat4(1.0), (float)-(M_PI/2), glm::vec3(0, 1, 0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(1, 1, 2));
+    snowProj->setParentTransform(parentTransformation);
 
     HierarchicalRenderable::addChild(body, upperBody);
     HierarchicalRenderable::addChild(upperBody, head);
@@ -301,6 +309,8 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
 
     HierarchicalRenderable::addChild(body, leftSki);
     HierarchicalRenderable::addChild(body, rightSki);
+
+    HierarchicalRenderable::addChild(body, snowProj);
 
     return body;
 }

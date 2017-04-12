@@ -41,6 +41,8 @@ TexturedSnowmanRenderablePtr createSnowman(ShaderProgramPtr program, const std::
                                            const std::string& headTextureFilename, const std::string& noseTextureFilename,
                                            const std::string& armTextureFilename,  const std::string& baseHatTextureFilename,
                                            const std::string& topHatTextureFilename, const std::string& skiTextureFilename,
-                                           const std::string& skiStickTextureFilename, const DynamicSnowmanPtr m_snowman);
+                                           const std::string& skiStickTextureFilename,
+                                           const std::string& snowProjectionsTextureFilename,
+                                           const DynamicSnowmanPtr m_snowman);
 
 #endif
