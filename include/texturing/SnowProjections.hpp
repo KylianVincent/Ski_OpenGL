@@ -31,8 +31,8 @@ private:
 
     MaterialPtr m_material;
     ParticlePtr m_particle;
-    float m_previousTime;
-    float m_previousAngle;
+    float m_previousTime = 0.0f;
+    float m_previousAngle = 0.0f;
 };
 
 typedef std::shared_ptr<SnowProjections> SnowProjectionsPtr;
