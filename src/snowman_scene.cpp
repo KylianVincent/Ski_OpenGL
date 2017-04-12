@@ -9,6 +9,8 @@
 #include "../include/texturing/MipMapCubeRenderable.hpp"
 #include "../include/texturing/TexturedMeshRenderable.hpp"
 #include "../include/texturing/TexturedSnowmanRenderable.hpp"
+#include "../include/texturing/TexturedSlalomGate.hpp"
+#include "../include/lighting/LightedCylinderRenderable.hpp"
 
 #include "../include/dynamics/DynamicSystem.hpp"
 #include "../include/dynamics/DampingForceField.hpp"
@@ -130,13 +132,37 @@ void initialize_snowman_scene(Viewer& viewer)
     // Snow is soft
     system->setRestitution(0.3f);
 
-    // Add a friction force if the snowman's skis aren't aligned with it's speed direction
-
-
     // Add the gravity force field
     ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
     system->addForceField(gravityForceField);
 
+
+    // Add some slalom gates
+    // glm::vec3 gx(0.0, 0.0, 10.0);
+    // glm::vec3 gv(0.0, 0.0, 0.0);
+    // float gm = 1.0, gr = , ga = 0.0;
+
+    int numberOfGates = 5;
+    int spaceBetweenGates = 20;
+    MaterialPtr redPlastic = Material::RedPlastic();
+    MaterialPtr bluePlastic = Material::BluePlastic();
+    std::string filenameSlalomGate = "../textures/slalom_gate.png";
+    // Starting gates
+    TexturedSlalomGatePtr startingGate = createGate(texShader, filenameSlalomGate, redPlastic);
+
+    TexturedSlalomGatePtr slalomGate;
+    for (int gateNumber = 0; gateNumber < numberOfGates; gateNumber++) {
+        if (gateNumber%2 == 1) {
+            slalomGate = createGate(texShader, filenameSlalomGate, redPlastic);
+            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), 7.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
+        } else {
+            slalomGate = createGate(texShader, filenameSlalomGate, bluePlastic);
+            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), -7.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
+        }
+        slalomGate->setParentTransform(localTransformation);
+        HierarchicalRenderable::addChild(startingGate, slalomGate);
+    }
+    viewer.addRenderable(startingGate);
 
     // Position the camera with regards to the skiing snowman, it's then animated
     // using its velocity and position
