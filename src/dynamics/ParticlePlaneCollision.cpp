@@ -34,6 +34,25 @@ void ParticlePlaneCollision::do_solveCollision()
     //The plane is assumed fixed
     m_particle->setPosition(prev_posparticle - interpenetrationDist*k);
 
+    //Particle normal direction
+    //Angle Y
+    //std::cout << "Y Angle : " << acos(glm::dot(k, glm::vec3(0, 0, 1))) << std::endl;
+    float particleDirectionAngle = m_particle->getAngle();
+    int sign = 1;
+    if (fabs(particleDirectionAngle) > M_PI/2.0f && fabs(particleDirectionAngle) < 3*M_PI/2.0f) {
+      sign = -1;
+    }
+    //std::cout << "PDA : " << particleDirectionAngle << std::endl;
+    float newYAngle = sign*acos(glm::dot(glm::normalize(glm::vec3(k[0]*cos(particleDirectionAngle), k[1]*sin(particleDirectionAngle), k[2])), glm::vec3(0, 0, 1)));
+    float oldYAngle = m_particle->getYAngle();
+    if (oldYAngle >= newYAngle) {
+      m_particle->setYAngle(glm::clamp(oldYAngle-0.02f ,newYAngle, oldYAngle));
+    } else {
+      m_particle->setYAngle(glm::clamp(oldYAngle+0.02f ,oldYAngle, newYAngle));
+    }
+
+
+
     //Particle velocity
     glm::vec3 prev_vparticle = m_particle->getVelocity();
     float proj_v = (1.0f + m_restitution)

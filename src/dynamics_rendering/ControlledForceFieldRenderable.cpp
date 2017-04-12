@@ -117,6 +117,7 @@ void ControlledForceFieldRenderable::do_animate(float time)
 
         if (m_status.turning_left && !m_status.turning_right) {
             m_status.angle += dt * m_status.angularSpeed;
+            m_status.angle = fmod(m_status.angle, 2*M_PI);
             float cos = std::cos(m_status.angle);
             float sin = std::sin(m_status.angle);
             m_status.movement =
@@ -130,6 +131,7 @@ void ControlledForceFieldRenderable::do_animate(float time)
             }
         } else if (m_status.turning_right && !m_status.turning_left) {
             m_status.angle -= dt * m_status.angularSpeed;
+            m_status.angle = fmod(m_status.angle, 2*M_PI);
             float cos = std::cos(m_status.angle);
             float sin = std::sin(m_status.angle);
             m_status.movement =
@@ -171,14 +173,14 @@ void ControlledForceFieldRenderable::do_draw()
     m_normals.clear();
 
     //Display an arrow representing the movement of the particle
-    for (ParticlePtr p : particles) {
-        m_positions.push_back(p->getPosition());
-        m_positions.push_back(p->getPosition()  + 2.0f* m_status.movement);
-        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
-        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
-        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
-        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
-    }
+//    for (ParticlePtr p : particles) {
+//        m_positions.push_back(p->getPosition());
+//        m_positions.push_back(p->getPosition()  + 2.0f* m_status.movement);
+//        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+//        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+//        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+//        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+//    }
 
     //Update data on the GPU
     glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_pBuffer));

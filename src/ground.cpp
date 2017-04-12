@@ -9,6 +9,7 @@
 #include "../include/texturing/MipMapCubeRenderable.hpp"
 #include "../include/texturing/TexturedMeshRenderable.hpp"
 #include "../include/texturing/TexturedSnowmanRenderable.hpp"
+#include "../include/texturing/TexturedTruncRenderable.hpp"
 
 #include "../include/dynamics/DynamicSystem.hpp"
 #include "../include/dynamics/DampingForceField.hpp"
@@ -185,6 +186,13 @@ void initialize_ground_scene(Viewer& viewer)
       }
     }
     std::cout << std::endl << "on arrive à afficher le tout" << std::endl << std::endl;
+
+
+    //Textured Tree
+    filename = "../textures/tree_texture.png";
+    std::string leafFilename = "../textures/grass_texture.png";
+    TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename);
+    viewer.addRenderable(tronc);
 
     viewer.startAnimation();
 }

@@ -18,13 +18,12 @@ void DampingForceField::do_addForce()
   for (ParticlePtr p : m_particles) {
     planarVelocity = glm::vec3(p->getVelocity()[0], p->getVelocity()[1], 0);
     if (glm::length(planarVelocity) < 0.5) {
-      std::cout << "JEPASSE" << std::endl;
       dotProduct = 1;
     } else {
       dotProduct = std::abs(glm::dot(glm::normalize(glm::vec3(p->getVelocity()[0], p->getVelocity()[1], 0)), glm::normalize(glm::vec3(cos(p->getAngle()), sin(p->getAngle()), 0))));
     }
-    std::cout << dotProduct << std::endl;
-    std::cout << "glm::vec3(" << p->getVelocity()[0] << ", " << p->getVelocity()[1] << ", 0)), glm::normalize(glm::vec3(" << cos(p->getAngle()) << ", " << sin(p->getAngle()) << ", 0))))" << std::endl;
+    //std::cout << dotProduct << std::endl;
+    //std::cout << "glm::vec3(" << p->getVelocity()[0] << ", " << p->getVelocity()[1] << ", 0)), glm::normalize(glm::vec3(" << cos(p->getAngle()) << ", " << sin(p->getAngle()) << ", 0))))" << std::endl;
     p->incrForce(-m_damping*p->getVelocity() -m_perpendicularDamping*(1-dotProduct)*p->getVelocity());
   }
 }

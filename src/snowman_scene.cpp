@@ -104,9 +104,12 @@ void initialize_snowman_scene(Viewer& viewer)
     std::string filenameTopHat = "../textures/snowman_topHat_texture.png";
     std::string filenameSkis = "../textures/ross_hero.png";
     std::string filenameSkiSticks = "../textures/leki_pole.png";
+    std::string filenameSnowProjections = "../textures/snow_projections.png";
     TexturedSnowmanRenderablePtr snowman = createSnowman(texShader, filenameBody, filenameHead, filenameNose, filenameArm,
-                                                         filenameBaseHat, filenameTopHat, filenameSkis, filenameSkiSticks, snowmanMvt);
+                                                         filenameBaseHat, filenameTopHat, filenameSkis, filenameSkiSticks,
+                                                         filenameSnowProjections, snowmanMvt);
     system->addParticle(snowmanMvt);
+    snowman->setMaterial(pearl);
     HierarchicalRenderable::addChild(systemRenderable, snowman);
 
     // Initialize a force field that apply only to the moving snowman

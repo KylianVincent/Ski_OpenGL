@@ -17,14 +17,17 @@ void Particle::setFixed(bool isFixed)
 }
 
 Particle::Particle(const glm::vec3 &position, const glm::vec3 &velocity,
-                   const float &mass, const float &radius, const float & angle)
+                   const float &mass, const float &radius, const float & angle,
+                  const float & xAngle, const float & yAngle)
     : m_initialPosition( position ), m_initialVelocity( velocity ),
     m_position(position),
     m_velocity(velocity),
     m_force(glm::vec3(0.0,0.0,0.0)),
     m_mass(mass),
     m_radius(radius), m_isFixed( false ),
-    m_angle(angle)
+    m_angle(angle),
+    m_xAngle(xAngle),
+    m_yAngle(yAngle)
 {}
 
 Particle::~Particle()
@@ -38,6 +41,14 @@ const glm::vec3 & Particle::getPosition() const
 
 const float &Particle::getAngle() const {
     return m_angle;
+}
+
+const float &Particle::getXAngle() const {
+    return m_xAngle;
+}
+
+const float &Particle::getYAngle() const {
+    return m_yAngle;
 }
 
 const glm::vec3 & Particle::getVelocity() const
@@ -67,6 +78,14 @@ void Particle::setPosition(const glm::vec3 &pos)
 
 void Particle::setAngle(const float &ang) {
     m_angle = ang;
+}
+
+void Particle::setXAngle(const float &ang) {
+    m_xAngle = ang;
+}
+
+void Particle::setYAngle(const float &ang) {
+    m_yAngle = ang;
 }
 
 void Particle::setVelocity(const glm::vec3 &vel)

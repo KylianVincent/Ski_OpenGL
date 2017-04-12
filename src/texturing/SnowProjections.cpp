@@ -1,4 +1,4 @@
-#include "../../include/texturing/TexturedSnowmanNoseRenderable.hpp"
+#include "../../include/texturing/SnowProjections.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -8,13 +8,17 @@
 #include <GL/glew.h>
 #include <math.h>
 #include <iostream>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
-TexturedSnowmanNoseRenderable::TexturedSnowmanNoseRenderable(ShaderProgramPtr shaderProgram, const std::string&noseTextureFilename)
+SnowProjections::SnowProjections(ShaderProgramPtr shaderProgram, const std::string&noseTextureFilename,
+        ParticlePtr particle)
         : HierarchicalRenderable(shaderProgram),
-          m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
+          m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0),
+          m_particle(particle)
 {
 
-    teachers::getUnitConeTextured(m_positions, m_normals, m_texCoords, 10, 10);
+    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 10);
 
     m_model = glm::mat4(1.0);
 
@@ -58,7 +62,7 @@ TexturedSnowmanNoseRenderable::TexturedSnowmanNoseRenderable(ShaderProgramPtr sh
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-TexturedSnowmanNoseRenderable::~TexturedSnowmanNoseRenderable()
+SnowProjections::~SnowProjections()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_tBuffer));
@@ -67,7 +71,7 @@ TexturedSnowmanNoseRenderable::~TexturedSnowmanNoseRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void TexturedSnowmanNoseRenderable::do_draw()
+void SnowProjections::do_draw()
 {
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -134,6 +138,12 @@ void TexturedSnowmanNoseRenderable::do_draw()
     }
 }
 
-void TexturedSnowmanNoseRenderable::do_animate(float time)
+void SnowProjections::do_animate(float time)
 {
+    float dt = time - m_previousTime;
+    glm::vec3 planarVelocity = glm::vec3(m_particle->getVelocity()[0], m_particle->getVelocity()[1], 0);
+    float newAngle = m_previousAngle + glm::length(planarVelocity)*0.0001f*dt;
+    glm::mat4 localTransform = glm::rotate(glm::mat4(1.0), -newAngle, glm::vec3(0, 1, 0));
+    setLocalTransform(localTransform);
+    m_previousAngle = newAngle;
 }

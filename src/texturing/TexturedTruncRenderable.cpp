@@ -1,4 +1,5 @@
-#include "../../include/texturing/TexturedSnowmanHeadRenderable.hpp"
+#include "../../include/texturing/TexturedTruncRenderable.hpp"
+#include "../../include/texturing/TexturedLeafRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -8,13 +9,15 @@
 #include <GL/glew.h>
 #include <math.h>
 #include <iostream>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
-TexturedSnowmanHeadRenderable::TexturedSnowmanHeadRenderable(ShaderProgramPtr shaderProgram,
-                                                             const std::string& headTextureFilename)
+TexturedTruncRenderable::TexturedTruncRenderable(ShaderProgramPtr shaderProgram, const std::string&TruncTextureFilename)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
-    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 10);
+
+    teachers::getUnitConeTextured(m_positions, m_normals, m_texCoords, 10, 10);
 
     m_model = glm::mat4(1.0);
 
@@ -34,7 +37,7 @@ TexturedSnowmanHeadRenderable::TexturedSnowmanHeadRenderable(ShaderProgramPtr sh
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile(headTextureFilename);
+    image.loadFromFile(TruncTextureFilename);
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -58,7 +61,7 @@ TexturedSnowmanHeadRenderable::TexturedSnowmanHeadRenderable(ShaderProgramPtr sh
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-TexturedSnowmanHeadRenderable::~TexturedSnowmanHeadRenderable()
+TexturedTruncRenderable::~TexturedTruncRenderable()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_tBuffer));
@@ -67,7 +70,7 @@ TexturedSnowmanHeadRenderable::~TexturedSnowmanHeadRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void TexturedSnowmanHeadRenderable::do_draw()
+void TexturedTruncRenderable::do_draw()
 {
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -134,6 +137,36 @@ void TexturedSnowmanHeadRenderable::do_draw()
     }
 }
 
-void TexturedSnowmanHeadRenderable::do_animate(float time)
+void TexturedTruncRenderable::do_animate(float time)
 {
+}
+
+void TexturedTruncRenderable::setMaterial(const MaterialPtr& material)
+{
+    m_material = material;
+}
+
+TexturedTruncRenderablePtr createTree(ShaderProgramPtr program, const std::string& TruncTextureFilename,
+                                           const std::string& LeafTextureFilename) {
+
+      //Temporary variables
+      glm::mat4 parentTransformation(1.0), localTransformation(1.0), scale(1.0), rot(1.0), trans(1.0);
+
+      // ---------- Trunc -----------
+      TexturedTruncRenderablePtr tronc = std::make_shared<TexturedTruncRenderable>(program, TruncTextureFilename);
+      scale = glm::scale(glm::mat4(1.0), glm::vec3(1.0,1.0,21.0));
+      tronc->setLocalTransform(tronc->getModelMatrix()*scale);
+      tronc->setParentTransform(parentTransformation);
+
+      int nb = 8;
+      for (int i = 1; i < nb; i++){
+        TexturedTruncRenderablePtr part = std::make_shared<TexturedTruncRenderable>(program,LeafTextureFilename);
+        scale = glm::scale(glm::mat4(1.0), glm::vec3(5.0+0.5*i,5.0+0.5*i,21.0 - nb));
+        trans = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,2.0*(nb-i) + 1));
+        part->setLocalTransform(part->getModelMatrix()*scale);
+        part->setParentTransform(trans);
+        HierarchicalRenderable::addChild(tronc,part);
+      }
+
+      return tronc;
 }

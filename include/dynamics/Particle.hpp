@@ -28,7 +28,8 @@ public:
      * @param radius The particle radius.
      */
     Particle(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius, const float &angle);
+            const float& mass, const float& radius, const float &angle,
+            const float& xAngle = 0.0, const float& yAngle = 0.0);
     virtual ~Particle();
 
     /**@brief Access to this particle's position.
@@ -44,6 +45,20 @@ public:
      * @return The particle's angle.
      */
     const float& getAngle() const;
+
+    /**@brief Access to this particle's angle with regards to axle X.
+     *
+     * Get the X angle of this particle.
+     * @return The particle's angle X.
+     */
+    const float& getXAngle() const;
+
+    /**@brief Access to this particle's angle with regards to axle .
+     *
+     * Get the Y angle of this particle.
+     * @return The particle's angle Y.
+     */
+    const float& getYAngle() const;
 
     /**@brief Access to this particle's velocity.
      *
@@ -93,6 +108,20 @@ public:
      * @param ang The new angle of this particle.
      */
     void setAngle(const float &ang);
+
+    /**@brief Set the particle's angle with regards to axle X.
+     *
+     * Set the X angle of this particle.
+     * @param ang The new angle of this particle.
+     */
+    void setXAngle(const float &ang);
+
+    /**@brief Set the particle's angle with regards to axle Y.
+     *
+     * Set the Y angle of this particle.
+     * @param ang The new angle of this particle.
+     */
+    void setYAngle(const float &ang);
 
     /**@brief Set the particle's velocity.
      *
@@ -184,6 +213,18 @@ private:
      * The angle of this particle.
      */
     float m_angle;
+
+    /**@brief The particle's angle with regards to axle X.
+     *
+     * The X angle of this particle.
+     */
+    float m_xAngle;
+
+    /**@brief The particle's angle with regards to axle Y.
+     *
+     * The Y angle of this particle.
+     */
+    float m_yAngle;
 
     /**@brief The particle's velocity.
      *

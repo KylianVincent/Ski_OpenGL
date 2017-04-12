@@ -1,4 +1,4 @@
-#include "../../include/texturing/TexturedSnowmanHatRenderable.hpp"
+#include "../../include/texturing/TexturedCylinderRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -9,7 +9,7 @@
 #include <math.h>
 #include <iostream>
 
-TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shaderProgram, const std::string&hatTextureFilename)
+TexturedCylinderRenderable::TexturedCylinderRenderable(ShaderProgramPtr shaderProgram, const std::string&hatTextureFilename)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
@@ -58,7 +58,7 @@ TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shad
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-TexturedSnowmanHatRenderable::~TexturedSnowmanHatRenderable()
+TexturedCylinderRenderable::~TexturedCylinderRenderable()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_tBuffer));
@@ -67,7 +67,7 @@ TexturedSnowmanHatRenderable::~TexturedSnowmanHatRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void TexturedSnowmanHatRenderable::do_draw()
+void TexturedCylinderRenderable::do_draw()
 {
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -134,6 +134,6 @@ void TexturedSnowmanHatRenderable::do_draw()
     }
 }
 
-void TexturedSnowmanHatRenderable::do_animate(float time)
+void TexturedCylinderRenderable::do_animate(float time)
 {
 }

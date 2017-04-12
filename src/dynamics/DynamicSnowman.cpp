@@ -1,8 +1,9 @@
 #include "./../../include/dynamics/DynamicSnowman.hpp"
 
     DynamicSnowman::DynamicSnowman(const glm::vec3& position, const glm::vec3& velocity,
-            const float& mass, const float& radius, const float& angle)
-            : Particle(position, velocity, mass, radius, angle) {
+            const float& mass, const float& radius, const float& angle,
+            const float& xAngle, const float& yAngle)
+            : Particle(position, velocity, mass, radius, angle, xAngle, yAngle) {
         m_leftArmAngle = 1.5f;
         m_rightArmAngle = 1.5f;
 
@@ -36,7 +37,7 @@ void DynamicSnowman::doRightAction(float &dt) {
 void DynamicSnowman::undoRightAction(float &dt) {
     float newArmAngle = (float) (m_rightArmAngle - dt* 1.0);
     m_rightArmAngle = glm::clamp(newArmAngle, 1.5f, 2.3f);
-//    std::cout << "D : Je baisse le bras droit ! : " << newArmAngle  << std::endl;
+//    std::cout << "D : Je lève le bras droit ! : " << newArmAngle  << std::endl;
 }
 
 void DynamicSnowman::doLeftAction(float &dt) {
@@ -49,7 +50,7 @@ void DynamicSnowman::doLeftAction(float &dt) {
 void DynamicSnowman::undoLeftAction(float &dt) {
     float newArmAngle = (float) (m_leftArmAngle - dt* 1.0);
     m_leftArmAngle = glm::clamp(newArmAngle, 1.5f, 2.3f);
-//    std::cout << "R : Je baisse le bras gauche ! : " << newArmAngle << std::endl;
+//    std::cout << "R : Je lève le bras gauche ! : " << newArmAngle << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& os, const DynamicSnowmanPtr& p)

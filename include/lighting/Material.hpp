@@ -135,6 +135,19 @@ public:
      */
     static MaterialPtr Bronze();
 
+    /**
+     * @brief Construct a red plastic material from real data according to http://devernay.free.fr/cours/opengl/materials.html
+     * @return A red plastic material.
+     */
+    static MaterialPtr RedPlastic();
+
+    /**
+     * @brief Construct a blue plastic material from real data according to http://devernay.free.fr/cours/opengl/materials.html
+     * @return A blue plastic material.
+     */
+    static MaterialPtr BluePlastic();
+
+
 private:
     glm::vec3 m_ambient; /*!< The ambient material vector defines what color this object reflects under ambient lighting. */
     glm::vec3 m_diffuse; /*!< The diffuse material vector defines the color of the object under diffuse lighting. */
