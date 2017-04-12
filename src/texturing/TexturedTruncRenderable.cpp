@@ -158,29 +158,10 @@ TexturedTruncRenderablePtr createTree(ShaderProgramPtr program, const std::strin
       tronc->setLocalTransform(tronc->getModelMatrix()*scale);
       tronc->setParentTransform(parentTransformation);
 
-      // ---------- Branch ----------
-      /*for (int i = 0; i < 10; i++){
-        TexturedTruncRenderablePtr branch = std::make_shared<TexturedTruncRenderable>(program, TruncTextureFilename);
-        scale = glm::scale(glm::mat4(1.0), glm::vec3(1.0,1.0,7.0));
-        rot = glm::rotate(glm::mat4(1.0), (float)(3.0*M_PI/2.0), glm::vec3(0.0,0.0,1.0));
-        trans = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,rand()));
-        branch->setLocalTransform(branch->getModelMatrix()*rot*scale);
-        branch->setParentTransform(trans);
-        HierarchicalRenderable::addChild(tronc, branch);
-          // ---------- Leaf -----------
-          for (int i = 0; i < 20; i++){
-            TexturedLeafRenderablePtr leaf = std::make_shared<TexturedLeafRenderable>(program, LeafTextureFilename);
-            scale = glm::scale(glm::mat4(1.0), glm::vec3(0.01,0.01,0.2));
-            rot = glm::rotate(glm::mat4(1.0), (float)(rand()*M_PI/2.0), glm::vec3(1,0,0));
-            leaf->setLocalTransform(leaf->getModelMatrix()*rot*scale);
-            leaf->setParentTransform(parentTransformation);
-            HierarchicalRenderable::addChild(branch, leaf);
-          }
-      }*/
       int nb = 8;
       for (int i = 1; i < nb; i++){
         TexturedTruncRenderablePtr part = std::make_shared<TexturedTruncRenderable>(program,LeafTextureFilename);
-        scale = glm::scale(glm::mat4(1.0), glm::vec3(5.0+0.5*i,5.0+0.5*i,21.0 - nb - 4.0));
+        scale = glm::scale(glm::mat4(1.0), glm::vec3(5.0+0.5*i,5.0+0.5*i,21.0 - nb));
         trans = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,2.0*(nb-i) + 1));
         part->setLocalTransform(part->getModelMatrix()*scale);
         part->setParentTransform(trans);
