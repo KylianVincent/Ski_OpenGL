@@ -1,4 +1,4 @@
-#include "../../include/texturing/TexturedSnowmanHatRenderable.hpp"
+#include "../../include/texturing/TexturedSphereRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -9,12 +9,12 @@
 #include <math.h>
 #include <iostream>
 
-TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shaderProgram, const std::string&hatTextureFilename)
+TexturedSphereRenderable::TexturedSphereRenderable(ShaderProgramPtr shaderProgram,
+                                                             const std::string& headTextureFilename)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
-
-    teachers::getUnitCylinderTextured(m_positions, m_normals, m_texCoords, 20);
+    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 10);
 
     m_model = glm::mat4(1.0);
 
@@ -34,7 +34,7 @@ TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shad
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile(hatTextureFilename);
+    image.loadFromFile(headTextureFilename);
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -58,7 +58,7 @@ TexturedSnowmanHatRenderable::TexturedSnowmanHatRenderable(ShaderProgramPtr shad
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-TexturedSnowmanHatRenderable::~TexturedSnowmanHatRenderable()
+TexturedSphereRenderable::~TexturedSphereRenderable()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_tBuffer));
@@ -67,7 +67,7 @@ TexturedSnowmanHatRenderable::~TexturedSnowmanHatRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void TexturedSnowmanHatRenderable::do_draw()
+void TexturedSphereRenderable::do_draw()
 {
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -134,6 +134,6 @@ void TexturedSnowmanHatRenderable::do_draw()
     }
 }
 
-void TexturedSnowmanHatRenderable::do_animate(float time)
+void TexturedSphereRenderable::do_animate(float time)
 {
 }

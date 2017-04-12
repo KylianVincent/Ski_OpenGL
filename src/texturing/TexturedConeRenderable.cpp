@@ -1,4 +1,4 @@
-#include "../../include/texturing/TexturedSnowmanHeadRenderable.hpp"
+#include "../../include/texturing/TexturedConeRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -9,12 +9,12 @@
 #include <math.h>
 #include <iostream>
 
-TexturedSnowmanHeadRenderable::TexturedSnowmanHeadRenderable(ShaderProgramPtr shaderProgram,
-                                                             const std::string& headTextureFilename)
+TexturedConeRenderable::TexturedConeRenderable(ShaderProgramPtr shaderProgram, const std::string&noseTextureFilename)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
-    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 10);
+
+    teachers::getUnitConeTextured(m_positions, m_normals, m_texCoords, 10, 10);
 
     m_model = glm::mat4(1.0);
 
@@ -34,7 +34,7 @@ TexturedSnowmanHeadRenderable::TexturedSnowmanHeadRenderable(ShaderProgramPtr sh
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile(headTextureFilename);
+    image.loadFromFile(noseTextureFilename);
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -58,7 +58,7 @@ TexturedSnowmanHeadRenderable::TexturedSnowmanHeadRenderable(ShaderProgramPtr sh
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-TexturedSnowmanHeadRenderable::~TexturedSnowmanHeadRenderable()
+TexturedConeRenderable::~TexturedConeRenderable()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_tBuffer));
@@ -67,7 +67,7 @@ TexturedSnowmanHeadRenderable::~TexturedSnowmanHeadRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void TexturedSnowmanHeadRenderable::do_draw()
+void TexturedConeRenderable::do_draw()
 {
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -134,6 +134,6 @@ void TexturedSnowmanHeadRenderable::do_draw()
     }
 }
 
-void TexturedSnowmanHeadRenderable::do_animate(float time)
+void TexturedConeRenderable::do_animate(float time)
 {
 }

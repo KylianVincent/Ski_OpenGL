@@ -1,4 +1,4 @@
-#include "../../include/texturing/TexturedSnowmanNoseRenderable.hpp"
+#include "../../include/texturing/TexturedCylinderRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../include/Utils.hpp"
@@ -9,12 +9,12 @@
 #include <math.h>
 #include <iostream>
 
-TexturedSnowmanNoseRenderable::TexturedSnowmanNoseRenderable(ShaderProgramPtr shaderProgram, const std::string&noseTextureFilename)
+TexturedCylinderRenderable::TexturedCylinderRenderable(ShaderProgramPtr shaderProgram, const std::string&hatTextureFilename)
         : HierarchicalRenderable(shaderProgram),
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
 
-    teachers::getUnitConeTextured(m_positions, m_normals, m_texCoords, 10, 10);
+    teachers::getUnitCylinderTextured(m_positions, m_normals, m_texCoords, 20);
 
     m_model = glm::mat4(1.0);
 
@@ -34,7 +34,7 @@ TexturedSnowmanNoseRenderable::TexturedSnowmanNoseRenderable(ShaderProgramPtr sh
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile(noseTextureFilename);
+    image.loadFromFile(hatTextureFilename);
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -58,7 +58,7 @@ TexturedSnowmanNoseRenderable::TexturedSnowmanNoseRenderable(ShaderProgramPtr sh
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-TexturedSnowmanNoseRenderable::~TexturedSnowmanNoseRenderable()
+TexturedCylinderRenderable::~TexturedCylinderRenderable()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_tBuffer));
@@ -67,7 +67,7 @@ TexturedSnowmanNoseRenderable::~TexturedSnowmanNoseRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void TexturedSnowmanNoseRenderable::do_draw()
+void TexturedCylinderRenderable::do_draw()
 {
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -134,6 +134,6 @@ void TexturedSnowmanNoseRenderable::do_draw()
     }
 }
 
-void TexturedSnowmanNoseRenderable::do_animate(float time)
+void TexturedCylinderRenderable::do_animate(float time)
 {
 }

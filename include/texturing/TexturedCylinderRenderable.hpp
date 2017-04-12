@@ -1,17 +1,16 @@
-#ifndef TEXTURED_SNOWMAN_RENDERABLE_HEAD_HPP
-#define TEXTURED_SNOWMAN_RENDERABLE_HEAD_HPP
+#ifndef TEXTURED_CYLINDER_RENDERABLE_HPP
+#define TEXTURED_CYLINDER_RENDERABLE_HPP
 
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
-class TexturedSnowmanHeadRenderable : public HierarchicalRenderable
+class TexturedCylinderRenderable : public HierarchicalRenderable
 {
     public:
-        ~TexturedSnowmanHeadRenderable();
-        TexturedSnowmanHeadRenderable(ShaderProgramPtr program, const
-                std::string& headTextureFilename);
+        ~TexturedCylinderRenderable();
+        TexturedCylinderRenderable(ShaderProgramPtr program, const std::string& hatTextureFilename);
 
     void setMaterial(const MaterialPtr& material);
 
@@ -31,6 +30,6 @@ class TexturedSnowmanHeadRenderable : public HierarchicalRenderable
         MaterialPtr m_material;
 };
 
-typedef std::shared_ptr<TexturedSnowmanHeadRenderable> TexturedSnowmanHeadRenderablePtr;
+typedef std::shared_ptr<TexturedCylinderRenderable> TexturedCylinderRenderablePtr;
 
 #endif
