@@ -147,24 +147,29 @@ void TexturedTruncRenderable::setMaterial(const MaterialPtr& material)
 }
 
 TexturedTruncRenderablePtr createTree(ShaderProgramPtr program, const std::string& TruncTextureFilename,
-                                           const std::string& LeafTextureFilename) {
+                                           const std::string& LeafTextureFilename, DynamicSystemPtr system,
+                                           const ParticlePtr& particle) {
 
       //Temporary variables
       glm::mat4 parentTransformation(1.0), localTransformation(1.0), scale(1.0), rot(1.0), trans(1.0);
-
+      MaterialPtr pearl = Material::Pearl();
       // ---------- Trunc -----------
       TexturedTruncRenderablePtr tronc = std::make_shared<TexturedTruncRenderable>(program, TruncTextureFilename);
       scale = glm::scale(glm::mat4(1.0), glm::vec3(1.0,1.0,21.0));
       tronc->setLocalTransform(tronc->getModelMatrix()*scale);
       tronc->setParentTransform(parentTransformation);
+      tronc->setMaterial(pearl);
+      particle->setFixed(true);
+      system->addParticle(particle);
 
-      int nb = 8;
+      int nb = 6;
       for (int i = 1; i < nb; i++){
         TexturedTruncRenderablePtr part = std::make_shared<TexturedTruncRenderable>(program,LeafTextureFilename);
         scale = glm::scale(glm::mat4(1.0), glm::vec3(5.0+0.5*i,5.0+0.5*i,21.0 - nb));
         trans = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,2.0*(nb-i) + 1));
         part->setLocalTransform(part->getModelMatrix()*scale);
         part->setParentTransform(trans);
+        part->setMaterial(pearl);
         HierarchicalRenderable::addChild(tronc,part);
       }
 
