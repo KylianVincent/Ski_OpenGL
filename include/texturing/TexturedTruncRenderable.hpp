@@ -3,6 +3,8 @@
 
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
+#include "./../dynamics/Particle.hpp"
+#include "./../dynamics/DynamicSystem.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -33,6 +35,7 @@ class TexturedTruncRenderable : public HierarchicalRenderable
 typedef std::shared_ptr<TexturedTruncRenderable> TexturedTruncRenderablePtr;
 
 TexturedTruncRenderablePtr createTree(ShaderProgramPtr program, const std::string& TruncTextureFilename,
-                                           const std::string& LeafTextureFilename);
+                                           const std::string& LeafTextureFilename, DynamicSystemPtr system,
+                                           const ParticlePtr& particle);
 
 #endif

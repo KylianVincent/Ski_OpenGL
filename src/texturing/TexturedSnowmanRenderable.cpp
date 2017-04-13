@@ -86,6 +86,7 @@ void TexturedSnowmanRenderable::do_draw()
     glm::mat4 rotate = glm::rotate(translate, m_snowman->getAngle(), glm::vec3(0, 0, 1));
     rotate = glm::rotate(rotate, m_snowman->getYAngle(), glm::vec3(0, 1, 0));
     setParentTransform(rotate);
+    updateModelMatrix();
 
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");

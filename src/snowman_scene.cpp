@@ -9,6 +9,9 @@
 #include "../include/texturing/MipMapCubeRenderable.hpp"
 #include "../include/texturing/TexturedMeshRenderable.hpp"
 #include "../include/texturing/TexturedSnowmanRenderable.hpp"
+#include "../include/texturing/TexturedSlalomGate.hpp"
+#include "../include/texturing/TexturedTruncRenderable.hpp"
+#include "../include/lighting/LightedCylinderRenderable.hpp"
 
 #include "../include/dynamics/DynamicSystem.hpp"
 #include "../include/dynamics/DampingForceField.hpp"
@@ -63,22 +66,23 @@ void initialize_snowman_scene(Viewer& viewer)
     glm::mat4 parentTransformation(1.0), localTransformation(1.0);
     std::string filename;
     MaterialPtr pearl = Material::Pearl();
+    MaterialPtr snow = Material::Snow();
 
     //Define a directional light for the whole scene
+    // glm::vec3 d_direction = glm::normalize(glm::vec3(-10.0,-1.5,-1.0));
     glm::vec3 d_direction = glm::normalize(glm::vec3(0.0,1.5,-1.0));
-    glm::vec3 d_ambient(1.0,1.0,1.0), d_diffuse(1.0,1.0,0.8), d_specular(1.0,1.0,1.0);
+    glm::vec3 d_ambient(1.0,1.0,1.0), d_diffuse(1.0,1.0,1.0), d_specular(1.0,1.0,1.0);
     DirectionalLightPtr directionalLight = std::make_shared<DirectionalLight>(d_direction, d_ambient, d_diffuse, d_specular);
     viewer.setDirectionalLight(directionalLight);
 
     // ---------- Textured plane -------------
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
-    //parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(10, 0, 5));
-    float planeRotation = (float)M_PI/8.0f;
+    float planeRotation = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
     parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,30.0,30.0));
     texPlane->setParentTransform(parentTransformation);
-    texPlane->setMaterial(pearl);
+    texPlane->setMaterial(snow);
     viewer.addRenderable(texPlane);
     // We add this textured plane as an obstacle
     glm::vec3 planeNormal(sin(planeRotation), 0, cos(planeRotation));
@@ -88,7 +92,7 @@ void initialize_snowman_scene(Viewer& viewer)
 
     // -------------- Snowman ----------------
     // Movement Mapping
-    glm::vec3 px(0.0, 0.0, 10.0);
+    glm::vec3 px(-5.0, 0.0, 5.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
     float pm = 1.0, pr, pa = 0.0;
     // Particle radius depends on the snowman
@@ -128,16 +132,80 @@ void initialize_snowman_scene(Viewer& viewer)
     system->setCollisionsDetection(true);
     // Initialize the restitution coefficient for collision
     // Snow is soft
-    system->setRestitution(0.3f);
-
-    // Add a friction force if the snowman's skis aren't aligned with it's speed direction
-
+    system->setRestitution(0.5f);
 
     // Add the gravity force field
-    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
+    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-15} );
     system->addForceField(gravityForceField);
 
+    // ----------- Mountains ---------------
 
+
+    // --------------- Trees ---------------
+    glm::vec3 tv(0.0, 0.0, 0.0);
+    float tm = 1.0, tr = 2.5, ta = 0.0;
+    glm::vec3 treeOffset(0, 0, 1.0);
+    glm::vec3 treePosition(10, 10, -tan(planeRotation)*10);
+
+    filename = "../textures/tree_texture.png";
+    std::string leafFilename = "../textures/grass_texture.png";
+    ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
+    TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
+    parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(0.3, 0.3, 0.4));
+    tronc->setParentTransform(parentTransformation);
+    viewer.addRenderable(tronc);
+
+
+    // -------------- Skybox ---------------
+
+    // ----------- Slalom Gates -------------
+    glm::vec3 gx(0.0, -3, 0.0);
+    glm::vec3 gv(0.0, 0.0, 0.0);
+    float gm = 100.0, gr = 1.0, ga = 0.0;
+    glm::vec3 particleOffset(0, 0, 1.0);
+
+    int numberOfGates = 5;
+    int spaceBetweenGates = 20;
+    MaterialPtr redPlastic = Material::RedPlastic();
+    MaterialPtr bluePlastic = Material::BluePlastic();
+    std::string filenameSlalomGate = "../textures/slalom_gate.png";
+
+
+    // Starting gates
+    ParticlePtr gateParticle = std::make_shared<Particle>(gx + particleOffset, gv, gm, gr, ga);
+    TexturedSlalomGatePtr startingGate = createGate(texShader, filenameSlalomGate, redPlastic, system, gateParticle);
+    localTransformation = glm::translate(glm::mat4(1.0), gx);
+    startingGate->setParentTransform(localTransformation);
+    HierarchicalRenderable::addChild(systemRenderable, startingGate);
+
+    gx = glm::vec3(0.0, 3.0, 0.0);
+    ParticlePtr gateParticle2 = std::make_shared<Particle>(gx + particleOffset, gv, gm, gr, ga);
+    TexturedSlalomGatePtr startingGate2 = createGate(texShader, filenameSlalomGate, redPlastic, system, gateParticle2);
+    parentTransformation = glm::translate(glm::mat4(1.0), gx);
+    startingGate2->setParentTransform(parentTransformation);
+    HierarchicalRenderable::addChild(systemRenderable, startingGate2);
+
+    TexturedSlalomGatePtr slalomGate;
+    MaterialPtr gateMaterial;
+    for (int gateNumber = 0; gateNumber < numberOfGates; gateNumber++) {
+        if (gateNumber%2 == 1) {
+            gx = glm::vec3(spaceBetweenGates*(gateNumber+1), 7.0 + (rand()%10 - 5)/10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1));
+            gateMaterial = redPlastic;
+        } else {
+            gx = glm::vec3(spaceBetweenGates*(gateNumber+1), -7.0 - (rand()%10 - 5)/10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1));
+            gateMaterial = bluePlastic;
+        }
+        gateParticle = std::make_shared<Particle>(gx + particleOffset, gv, gm, gr, ga);
+        slalomGate = createGate(texShader, filenameSlalomGate, gateMaterial, system, gateParticle);
+        parentTransformation = glm::translate(glm::mat4(1.0), gx);
+        slalomGate->setParentTransform(parentTransformation);
+        HierarchicalRenderable::addChild(systemRenderable, slalomGate);
+    }
+    viewer.addRenderable(startingGate);
+
+
+    // ----------- Camera -------------
     // Position the camera with regards to the skiing snowman, it's then animated
     // using its velocity and position
     viewer.getCamera().setViewMatrix( glm::lookAt( glm::vec3(-8, 0, 8 ) + px, px, glm::vec3( 0, 0, 1 ) ) );

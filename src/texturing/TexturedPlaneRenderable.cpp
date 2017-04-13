@@ -18,10 +18,18 @@ TexturedPlaneRenderable::TexturedPlaneRenderable(
     teachers::getUnitPlane(m_positions, m_normals, m_origTexCoords);
     m_texCoords = m_origTexCoords;
 
+    // texture options
+    float factor = 10.0;
+    for(size_t i=0; i<m_texCoords.size(); ++i)
+    {
+        m_texCoords[i] = factor*m_origTexCoords[i];
+    }
+
     // === PART 1: Vertex attributes, except texture coordinates
     //Create buffers
     glGenBuffers(1, &m_pBuffer); //vertices
     glGenBuffers(1, &m_nBuffer); //normals
+
 
     //Activate buffer and send data to the graphics card
     glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_pBuffer));
@@ -47,11 +55,12 @@ TexturedPlaneRenderable::TexturedPlaneRenderable(
     glcheck(glGenTextures(1, &m_texId));
     glcheck(glBindTexture(GL_TEXTURE_2D, m_texId));
 
-    // texture options
+    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
     glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
     glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-    glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    // glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    // glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
     // Transfer the texture image texture to the GPU
     glcheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F,
@@ -159,16 +168,6 @@ void TexturedPlaneRenderable::updateTextureOption()
     case 0:
         for(size_t i=0; i<m_texCoords.size(); ++i)
         {
-            m_texCoords[i] = m_origTexCoords[i];
-        }
-        glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        text.append("Wrapping: CLAMP_TO_EDGE");
-        break;
-
-    case 1:
-        for(size_t i=0; i<m_texCoords.size(); ++i)
-        {
             m_texCoords[i] = factor*m_origTexCoords[i];
         }
         glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
@@ -176,7 +175,7 @@ void TexturedPlaneRenderable::updateTextureOption()
         text.append("Wrapping: REPEAT");
         break;
 
-    case 2:
+    case 1:
         for(size_t i=0; i<m_texCoords.size(); ++i)
         {
             m_texCoords[i] = factor*m_origTexCoords[i];
@@ -184,6 +183,16 @@ void TexturedPlaneRenderable::updateTextureOption()
         glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
         glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
         text.append("Wrapping: MIRRORED_REPEAT");
+        break;
+
+    case 2:
+        for(size_t i=0; i<m_texCoords.size(); ++i)
+        {
+            m_texCoords[i] = m_origTexCoords[i];
+        }
+        glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        glcheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+        text.append("Wrapping: CLAMP_TO_EDGE");
         break;
 
     case 3:

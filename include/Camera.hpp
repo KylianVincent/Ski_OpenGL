@@ -285,6 +285,7 @@ private:
     float m_zfar;
     glm::mat4 m_view;
     glm::mat4 m_projection;
+    glm::vec3 m_oldVelocity;
 };
 
 #endif
