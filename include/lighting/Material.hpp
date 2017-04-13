@@ -147,6 +147,12 @@ public:
      */
     static MaterialPtr BluePlastic();
 
+    /**
+     * @brief Construct a material for snow
+     * @return A snow material.
+     */
+    static MaterialPtr Snow();
+
 
 private:
     glm::vec3 m_ambient; /*!< The ambient material vector defines what color this object reflects under ambient lighting. */

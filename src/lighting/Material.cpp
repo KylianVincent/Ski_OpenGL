@@ -161,3 +161,13 @@ MaterialPtr Material::BluePlastic()
     float shininess = openGLFactor*0.25;
     return std::make_shared<Material>(ambient, diffuse, specular, shininess);
 }
+
+MaterialPtr Material::Snow()
+{
+    float openGLFactor=128.0;
+    glm::vec3 ambient(0.35, 0.35, 0.35);
+    glm::vec3 diffuse(0.6, 0.6, 0.6);
+    glm::vec3 specular(0.3, 0.3, 0.3);
+    float shininess = openGLFactor*0.08;
+    return std::make_shared<Material>(ambient, diffuse, specular, shininess);
+}

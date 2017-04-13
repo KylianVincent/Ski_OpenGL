@@ -65,9 +65,10 @@ void initialize_snowman_scene(Viewer& viewer)
     glm::mat4 parentTransformation(1.0), localTransformation(1.0);
     std::string filename;
     MaterialPtr pearl = Material::Pearl();
+    MaterialPtr snow = Material::Snow();
 
     //Define a directional light for the whole scene
-    glm::vec3 d_direction = glm::normalize(glm::vec3(0.0,1.5,-1.0));
+    glm::vec3 d_direction = glm::normalize(glm::vec3(-10.0,-1.5,-1.0));
     glm::vec3 d_ambient(1.0,1.0,1.0), d_diffuse(1.0,1.0,0.8), d_specular(1.0,1.0,1.0);
     DirectionalLightPtr directionalLight = std::make_shared<DirectionalLight>(d_direction, d_ambient, d_diffuse, d_specular);
     viewer.setDirectionalLight(directionalLight);
@@ -75,11 +76,11 @@ void initialize_snowman_scene(Viewer& viewer)
     // ---------- Textured plane -------------
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
-    float planeRotation = (float)M_PI/8.0f;
+    float planeRotation = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,300.0,300.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,30.0,30.0));
     texPlane->setParentTransform(parentTransformation);
-    texPlane->setMaterial(pearl);
+    texPlane->setMaterial(snow);
     viewer.addRenderable(texPlane);
     // We add this textured plane as an obstacle
     glm::vec3 planeNormal(sin(planeRotation), 0, cos(planeRotation));
@@ -132,9 +133,17 @@ void initialize_snowman_scene(Viewer& viewer)
     system->setRestitution(0.5f);
 
     // Add the gravity force field
-    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-9.81} );
+    ConstantForceFieldPtr gravityForceField = std::make_shared<ConstantForceField>(system->getParticles(), glm::vec3{0,0,-15} );
     system->addForceField(gravityForceField);
 
+    // ----------- Mountains ---------------
+
+
+    // --------------- Trees ---------------
+    // filename = "../textures/tree_texture.png";
+    // std::string leafFilename = "../textures/grass_texture.png";
+    // TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename, system);
+    // viewer.addRenderable(tronc);
 
 
     // ----------- Slalom Gates -------------
