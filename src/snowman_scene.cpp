@@ -137,8 +137,9 @@ void initialize_snowman_scene(Viewer& viewer)
     system->addForceField(gravityForceField);
 
 
-    // Add some slalom gates
-    glm::vec3 gx(0.0, 0.0, 10.0);
+
+    // ----------- Slalom Gates -------------
+    glm::vec3 gx(0.0, -3, 0.0);
     glm::vec3 gv(0.0, 0.0, 0.0);
     float gm = 1.0, gr = 1.4, ga = 0.0;
 
@@ -147,13 +148,17 @@ void initialize_snowman_scene(Viewer& viewer)
     MaterialPtr redPlastic = Material::RedPlastic();
     MaterialPtr bluePlastic = Material::BluePlastic();
     std::string filenameSlalomGate = "../textures/slalom_gate.png";
+
+
     // Starting gates
-    //ParticlePtr snowmanMvt = std::make_shared<DynamicSnowman>(px, pv, pm, pr, pa);
+    ParticlePtr gateParticle = std::make_shared<DynamicSnowman>(gx, gv, gm, gr, ga);
     TexturedSlalomGatePtr startingGate = createGate(texShader, filenameSlalomGate, redPlastic);
-    localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, -3, 0));
+    localTransformation = glm::translate(glm::mat4(1.0), gx);
     startingGate->setParentTransform(localTransformation);
+
+    gx = glm::vec3(0.0, 6.0, 0.0);
     TexturedSlalomGatePtr startingGate2 = createGate(texShader, filenameSlalomGate, redPlastic);
-    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, 6, 0));
+    parentTransformation = glm::translate(glm::mat4(1.0), gx);
     startingGate2->setParentTransform(parentTransformation);
     HierarchicalRenderable::addChild(startingGate, startingGate2);
 
@@ -161,16 +166,19 @@ void initialize_snowman_scene(Viewer& viewer)
     for (int gateNumber = 0; gateNumber < numberOfGates; gateNumber++) {
         if (gateNumber%2 == 1) {
             slalomGate = createGate(texShader, filenameSlalomGate, redPlastic);
-            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), 10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
+            gx = glm::vec3(spaceBetweenGates*(gateNumber+1), 10.0 + (rand()%10 - 5)/10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1));
         } else {
             slalomGate = createGate(texShader, filenameSlalomGate, bluePlastic);
-            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), -4.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
+            gx = glm::vec3(spaceBetweenGates*(gateNumber+1), -4.0 - (rand()%10 - 5)/10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1));
         }
-        slalomGate->setParentTransform(localTransformation);
+        parentTransformation = glm::translate(glm::mat4(1.0), gx);
+        slalomGate->setParentTransform(parentTransformation);
         HierarchicalRenderable::addChild(startingGate, slalomGate);
     }
     viewer.addRenderable(startingGate);
 
+
+    // ----------- Camera -------------
     // Position the camera with regards to the skiing snowman, it's then animated
     // using its velocity and position
     viewer.getCamera().setViewMatrix( glm::lookAt( glm::vec3(-8, 0, 8 ) + px, px, glm::vec3( 0, 0, 1 ) ) );
