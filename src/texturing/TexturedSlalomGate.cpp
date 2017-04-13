@@ -1,5 +1,5 @@
 #include "../../include/texturing/TexturedSlalomGate.hpp"
-#include "../../include/texturing/TexturedPlaneRenderable.hpp"
+#include "../../include/texturing/TexturedCubeRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../teachers/Geometries.hpp"
 
@@ -39,9 +39,9 @@ TexturedSlalomGatePtr createGate(ShaderProgramPtr program, const std::string& ga
     rightPole->setLocalTransform(localTransformation);
 
     // ---------- Fabric -----------
-    TexturedPlaneRenderablePtr fabric = std::make_shared<TexturedPlaneRenderable>(program, gateTextureFilename);
+    TexturedCubeRenderablePtr fabric = std::make_shared<TexturedCubeRenderable>(program, gateTextureFilename);
     localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, 2));
-    localTransformation = glm::scale(localTransformation, glm::vec3(1,1.4,1));
+    localTransformation = glm::scale(localTransformation, glm::vec3(0.001,1.4,1));
     localTransformation = glm::rotate(localTransformation, (float) M_PI/2.0f, glm::vec3(0,1,0));
     fabric->setLocalTransform(localTransformation);
 

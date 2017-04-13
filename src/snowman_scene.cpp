@@ -75,10 +75,9 @@ void initialize_snowman_scene(Viewer& viewer)
     // ---------- Textured plane -------------
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
-    //parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(10, 0, 5));
     float planeRotation = (float)M_PI/8.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,30.0,30.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,300.0,300.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(pearl);
     viewer.addRenderable(texPlane);
@@ -141,7 +140,7 @@ void initialize_snowman_scene(Viewer& viewer)
     // ----------- Slalom Gates -------------
     glm::vec3 gx(0.0, -3, 0.0);
     glm::vec3 gv(0.0, 0.0, 0.0);
-    float gm = 100.0, gr = 1.4, ga = 0.0;
+    float gm = 100.0, gr = 1.0, ga = 0.0;
     glm::vec3 particleOffset(0, 0, 1.0);
 
     int numberOfGates = 5;
