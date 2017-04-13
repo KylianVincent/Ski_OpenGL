@@ -169,6 +169,7 @@ void Viewer::animate()
 {
     if(m_animationIsStarted)
     {
+    // std::cout << "JEPASSELA" << std::endl;
         if(m_animationLoop && getTime()>=m_loopDuration)
             resetAnimation();
 

@@ -29,6 +29,9 @@
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 
+#include "../include/keyframes/KeyframedMeshRenderable.hpp"
+#include "../include/keyframes/GeometricTransformation.hpp"
+
 
 void initialize_snowman_scene(Viewer& viewer)
 {
@@ -80,7 +83,7 @@ void initialize_snowman_scene(Viewer& viewer)
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
     float planeRotation = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,30.0,30.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,300.0,1.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(snow);
     viewer.addRenderable(texPlane);
@@ -205,11 +208,33 @@ void initialize_snowman_scene(Viewer& viewer)
     viewer.addRenderable(startingGate);
 
 
+    // ----------- Airplane ----------
+    std::string filenameAirplaneMesh = "../meshes/bunny.obj";
+    std::string filenameAirplaneTexture = "../textures/texturedBunny.png";
+    auto airplane = std::make_shared<KeyframedMeshRenderable>(texShader, Material::Pearl(), filenameAirplaneMesh, filenameAirplaneTexture);
+    float heightInSky = 500;
+    glm::vec3 center(500.0 , 0.0, heightInSky);
+    float trajRadius = 30;
+    airplane->setParentTransform(glm::mat4(1.0));
+
+    //Keyframes on parent transformation: pairs of (time, transformation)
+    airplane->addParentTransformKeyframe(0.0, GeometricTransformation(glm::vec3(1.0, 0.0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(1.0, GeometricTransformation(glm::vec3(0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(2.0, GeometricTransformation(glm::vec3(0.0, 1, 0.0)*trajRadius, glm::angleAxis((float) (M_PI), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(3.0, GeometricTransformation(glm::vec3(-0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (5*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(4.0, GeometricTransformation(glm::vec3(-1, 0, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(5.0, GeometricTransformation(glm::vec3(-0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (7*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(6.0, GeometricTransformation(glm::vec3(0, -1, 0.0)*trajRadius, glm::angleAxis((float) (2*M_PI), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(7.0, GeometricTransformation(glm::vec3(0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (9*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(8.0, GeometricTransformation(glm::vec3(1, 0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    viewer.addRenderable(airplane);
+
     // ----------- Camera -------------
     // Position the camera with regards to the skiing snowman, it's then animated
     // using its velocity and position
     viewer.getCamera().setViewMatrix( glm::lookAt( glm::vec3(-8, 0, 8 ) + px, px, glm::vec3( 0, 0, 1 ) ) );
     // Control it by the snowman
     viewer.setGuidingRenderable(snowmanMvt);
+    viewer.setAnimationLoop(true, 8.0);
     viewer.startAnimation();
 }

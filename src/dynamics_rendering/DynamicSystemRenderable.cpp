@@ -23,9 +23,9 @@ void DynamicSystemRenderable::do_draw()
 
 void DynamicSystemRenderable::do_animate(float time)
 {
-    if (time - m_lastUpdateTime >= m_system->getDt()) {
-        //Dynamic system step
+    if (time - m_lastUpdateTime >= m_system->getDt() || time <= m_lastUpdateTime) {
         m_system->computeSimulationStep();
+        //Dynamic system step
         m_lastUpdateTime = time;
     }
 }
