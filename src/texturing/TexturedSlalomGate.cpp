@@ -10,8 +10,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-TexturedSlalomGate::TexturedSlalomGate(ShaderProgramPtr program, const MaterialPtr& material)
-    : LightedCylinderRenderable(program, material)
+TexturedSlalomGate::TexturedSlalomGate(ShaderProgramPtr program, const MaterialPtr& material, ParticlePtr particle)
+    : LightedCylinderRenderable(program, material),
+      m_particle(particle)
 {
 }
 
@@ -20,17 +21,19 @@ TexturedSlalomGate::~TexturedSlalomGate()
 }
 
 
-TexturedSlalomGatePtr createGate(ShaderProgramPtr program, const std::string& gateTextureFilename, const MaterialPtr& mat) {
+TexturedSlalomGatePtr createGate(ShaderProgramPtr program, const std::string& gateTextureFilename, const MaterialPtr& mat, DynamicSystemPtr system, const ParticlePtr& particle) {
     //Temporary variables
     glm::mat4 parentTransformation(1.0), localTransformation(1.0);
 
     // ---------- Poles -----------
-    TexturedSlalomGatePtr leftPole = std::make_shared<TexturedSlalomGate>(program, mat);
+    TexturedSlalomGatePtr leftPole = std::make_shared<TexturedSlalomGate>(program, mat, particle);
     localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, 0.7, 0));
     localTransformation = glm::scale(localTransformation, glm::vec3(0.05,0.05,3));
     leftPole->setLocalTransform(localTransformation);
+    particle->setFixed(true);
+    system->addParticle(particle);
 
-    TexturedSlalomGatePtr rightPole = std::make_shared<TexturedSlalomGate>(program, mat);
+    TexturedSlalomGatePtr rightPole = std::make_shared<TexturedSlalomGate>(program, mat, particle);
     localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, -0.7, 0));
     localTransformation = glm::scale(localTransformation, glm::vec3(0.05,0.05,3));
     rightPole->setLocalTransform(localTransformation);
