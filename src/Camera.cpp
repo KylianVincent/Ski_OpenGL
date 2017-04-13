@@ -171,6 +171,11 @@ void Camera::setZnear( const float& v )
     m_projection = glm::perspective( m_fov, m_ratio, m_znear, m_zfar );
 }
 
+void Camera::setOldVelocity(const glm::vec3& v)
+{
+  m_oldVelocity = v;
+}
+
 Camera::CAMERA_MOUSE_BEHAVIOR Camera::getMouseBehavior() const
 {
     return m_mouseBehavior;
