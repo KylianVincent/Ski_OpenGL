@@ -9,6 +9,7 @@
 #include "../include/texturing/MipMapCubeRenderable.hpp"
 #include "../include/texturing/TexturedMeshRenderable.hpp"
 #include "../include/texturing/TexturedSnowmanRenderable.hpp"
+#include "../include/texturing/TexturedTruncRenderable.hpp"
 
 #include "../include/dynamics/DynamicSystem.hpp"
 #include "../include/dynamics/DampingForceField.hpp"
@@ -85,6 +86,18 @@ void initialize_snowman_scene(Viewer& viewer)
     glm::vec3 planePoint(0, 0, 0);
     PlanePtr ground = std::make_shared<Plane>(planeNormal, planePoint);
     system->addPlaneObstacle(ground);
+
+    // ---------- Textured Tree --------------
+    filename = "../textures/tree_texture.png";
+    std::string leafFilename = "../textures/grass_texture.png";
+    for (int i = 0; i < 15; i++){
+      TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename);
+      glm::mat4 trans = glm::translate(glm::mat4(1.0), glm::vec3(rand()%100 - rand()%100,rand()%100 - rand()%100,0.0));
+      glm::mat4 rot = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
+      tronc->setParentTransform(tronc->getModelMatrix()*rot*trans);
+      tronc->setMaterial(pearl);
+      HierarchicalRenderable::addChild(systemRenderable,tronc);
+    }
 
     // -------------- Snowman ----------------
     // Movement Mapping
