@@ -166,7 +166,7 @@ TexturedTruncRenderablePtr createTree(ShaderProgramPtr program, const std::strin
       for (int i = 1; i < nb; i++){
         TexturedTruncRenderablePtr part = std::make_shared<TexturedTruncRenderable>(program,LeafTextureFilename);
         scale = glm::scale(glm::mat4(1.0), glm::vec3(5.0+0.5*i,5.0+0.5*i,21.0 - nb));
-        trans = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,2.0*(nb-i) + 1));
+        trans = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,2.0*(nb-i) + 4));
         part->setLocalTransform(part->getModelMatrix()*scale);
         part->setParentTransform(trans);
         part->setMaterial(pearl);

@@ -1,7 +1,7 @@
 #include "../include/ShaderProgram.hpp"
 #include "../include/Viewer.hpp"
 #include "../include/FrameRenderable.hpp"
-#include "../include/lighting/DirectionalLightRenderable.hpp"
+#include "../include/lighting/Lights.hpp"
 
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
 #include "../include/texturing/TexturedCubeRenderable.hpp"
@@ -70,10 +70,12 @@ void initialize_snowman_scene(Viewer& viewer)
 
     //Define a directional light for the whole scene
     // glm::vec3 d_direction = glm::normalize(glm::vec3(-10.0,-1.5,-1.0));
-    glm::vec3 d_direction = glm::normalize(glm::vec3(0.0,1.5,-1.0));
-    glm::vec3 d_ambient(1.0,1.0,1.0), d_diffuse(1.0,1.0,1.0), d_specular(1.0,1.0,1.0);
+
+    glm::vec3 d_direction = glm::normalize(glm::vec3(-1.0,-1.0,0.0));
+    glm::vec3 d_ambient(2.5,2.5,2.5), d_diffuse(1.0,1.0,1.0), d_specular(1.0,1.0,1.0);
     DirectionalLightPtr directionalLight = std::make_shared<DirectionalLight>(d_direction, d_ambient, d_diffuse, d_specular);
     viewer.setDirectionalLight(directionalLight);
+
 
     // ---------- Textured plane -------------
     filename = "../textures/ice_texture.png";
@@ -148,7 +150,7 @@ void initialize_snowman_scene(Viewer& viewer)
     glm::vec3 treePosition(10, 10, -tan(planeRotation)*10);
 
     filename = "../textures/tree_texture.png";
-    std::string leafFilename = "../textures/grass_texture.png";
+    std::string leafFilename = "../textures/grass_texture2.png";
     ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
     TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
     parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
@@ -158,6 +160,23 @@ void initialize_snowman_scene(Viewer& viewer)
 
 
     // -------------- Skybox ---------------
+    parentTransformation = glm::mat4(1.0);
+    filename = "../textures/sky.png";
+    TexturedCubeRenderablePtr skybox = std::make_shared<TexturedCubeRenderable>(texShader,filename);
+    localTransformation = glm::scale(skybox->getModelMatrix(), glm::vec3(1000.0,1000.0,1000.0));
+    skybox->setLocalTransform(localTransformation);
+    skybox->setParentTransform(parentTransformation);
+    skybox->setMaterial(pearl);
+    viewer.addRenderable(skybox);
+
+    filename = "../textures/bluesky.png";
+    TexturedCubeRenderablePtr sky = std::make_shared<TexturedCubeRenderable>(texShader,filename);
+    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(1000.0,1000.0,1.0));
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,500.0));
+    sky->setLocalTransform(localTransformation);
+    sky->setParentTransform(parentTransformation);
+    sky->setMaterial(pearl);
+    viewer.addRenderable(sky);
 
     // ----------- Slalom Gates -------------
     glm::vec3 gx(0.0, -3, 0.0);
