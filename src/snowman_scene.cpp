@@ -90,7 +90,7 @@ void initialize_snowman_scene(Viewer& viewer)
 
     // -------------- Snowman ----------------
     // Movement Mapping
-    glm::vec3 px(0.0, 0.0, 10.0);
+    glm::vec3 px(-5.0, 0.0, 5.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
     float pm = 1.0, pr, pa = 0.0;
     // Particle radius depends on the snowman
@@ -138,9 +138,9 @@ void initialize_snowman_scene(Viewer& viewer)
 
 
     // Add some slalom gates
-    // glm::vec3 gx(0.0, 0.0, 10.0);
-    // glm::vec3 gv(0.0, 0.0, 0.0);
-    // float gm = 1.0, gr = , ga = 0.0;
+    glm::vec3 gx(0.0, 0.0, 10.0);
+    glm::vec3 gv(0.0, 0.0, 0.0);
+    float gm = 1.0, gr = 1.4, ga = 0.0;
 
     int numberOfGates = 5;
     int spaceBetweenGates = 20;
@@ -148,16 +148,23 @@ void initialize_snowman_scene(Viewer& viewer)
     MaterialPtr bluePlastic = Material::BluePlastic();
     std::string filenameSlalomGate = "../textures/slalom_gate.png";
     // Starting gates
+    //ParticlePtr snowmanMvt = std::make_shared<DynamicSnowman>(px, pv, pm, pr, pa);
     TexturedSlalomGatePtr startingGate = createGate(texShader, filenameSlalomGate, redPlastic);
+    localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, -3, 0));
+    startingGate->setParentTransform(localTransformation);
+    TexturedSlalomGatePtr startingGate2 = createGate(texShader, filenameSlalomGate, redPlastic);
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0, 6, 0));
+    startingGate2->setParentTransform(parentTransformation);
+    HierarchicalRenderable::addChild(startingGate, startingGate2);
 
     TexturedSlalomGatePtr slalomGate;
     for (int gateNumber = 0; gateNumber < numberOfGates; gateNumber++) {
         if (gateNumber%2 == 1) {
             slalomGate = createGate(texShader, filenameSlalomGate, redPlastic);
-            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), 7.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
+            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), 10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
         } else {
             slalomGate = createGate(texShader, filenameSlalomGate, bluePlastic);
-            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), -7.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
+            localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(spaceBetweenGates*(gateNumber+1), -4.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1)));
         }
         slalomGate->setParentTransform(localTransformation);
         HierarchicalRenderable::addChild(startingGate, slalomGate);

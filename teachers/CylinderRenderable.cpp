@@ -14,7 +14,7 @@ teachers::CylinderRenderable::CylinderRenderable(ShaderProgramPtr shaderProgram,
     m_normalPerVertex(normalPerVertex),
     m_pBuffer(0), m_cBuffer(0), m_nBuffer(0), m_iBuffer(0)
 {
-    std::cerr << "Hey, teacher, leave them kids alone! -- Cylinder" << std::endl;
+    std::cerr << "We don't need no education! -- Cylinder" << std::endl;
 
     if (m_normalPerVertex)
         buildNormalPerVertex(nbSlices);   // with indexing
