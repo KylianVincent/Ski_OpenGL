@@ -93,6 +93,8 @@ void ControlledForceFieldRenderable::do_keyPressedEvent(sf::Event& e)
         m_status.accelerating = true;
     } else if (e.key.code == sf::Keyboard::Down) {
         m_status.deaccelerating = true;
+    } else if (e.key.code ==sf::Keyboard::F5) {
+        m_status.angle = 0.0;
     }
 }
 

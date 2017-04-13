@@ -9,7 +9,7 @@ using namespace std;
 
 Camera::Camera()
     : m_view{ glm::lookAt( glm::vec3{0, 0, -5}, glm::vec3{}, glm::vec3{0,1,0}) },
-      m_fov{ 1.04f }, m_ratio{ 1.0f }, m_znear{ 1.0f }, m_zfar{ 100.0f },
+      m_fov{ 1.04f }, m_ratio{ 1.0f }, m_znear{ 1.0f }, m_zfar{ 1000.0f },
       m_mouseBehavior{ AUTO_BEHAVIOR }
 {}
 
@@ -169,6 +169,11 @@ void Camera::setZnear( const float& v )
 {
     m_znear = v;
     m_projection = glm::perspective( m_fov, m_ratio, m_znear, m_zfar );
+}
+
+void Camera::setOldVelocity(const glm::vec3& v)
+{
+  m_oldVelocity = v;
 }
 
 Camera::CAMERA_MOUSE_BEHAVIOR Camera::getMouseBehavior() const
