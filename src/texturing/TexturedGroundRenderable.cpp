@@ -106,8 +106,7 @@ TexturedGroundRenderable::TexturedGroundRenderable(
   float test;
   for (int i=0; i<tailleX; i++){
     for (int j=0; j<tailleY; j++){
-      test =Get2DPerlinNoiseValue((float)i,(float)j,10)*5;
-      matriceElevation[i][j] = test;
+      matriceElevation[i][j] = Get2DPerlinNoiseValue((float)i,(float)j,10)*5;
     }
   }
 

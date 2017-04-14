@@ -175,17 +175,18 @@ void initialize_snowman_scene(Viewer& viewer)
     viewer.addRenderable(texGroundRight);
 
     // --------------- Trees ---------------
-    for (int k=0; k<1; k++){
-        int x = 0;
-        int y = rand()%50;
+    for (int k=0; k<10; k++){
+        int x = rand()%1000;
+        int y = rand()%200;
         glm::vec3 tv(0.0, 0.0, 0.0);
         float tm = 1.0, tr = 2.5, ta = 0.0;
         glm::vec3 treeOffset(0, 0, 1.0);
         glm::vec3 treePosition;
-        if(y<50){
-          treePosition = glm::vec3(x, y+25, -x*sin(planeRotation) +(y+25)*sin(planeRotationLeft) + texGroundRight->getMatriceElevation(x,y)) ;
+        if(y<100){
+          std::cout << texGroundRight->getMatriceElevation(x,y) << std::endl;
+          treePosition = glm::vec3(x, y+28,y*tan(planeRotationRight+0.05)- x*tan(planeRotation));//+ texGroundRight->getMatriceElevation(x,y)) ;
         }else{
-          treePosition = glm::vec3(x,-y+25,-x*sin(planeRotation) +(y-50)*sin(planeRotationRight) + texGroundLeft->getMatriceElevation(x,y));
+          treePosition = glm::vec3(x,-y-28,y*tan(planeRotationRight+0.05)- x*tan(planeRotation));
         }
 
         filename = "../textures/tree_texture.png";
