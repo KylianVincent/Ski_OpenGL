@@ -23,9 +23,9 @@ void DynamicSystemRenderable::do_draw()
 
 void DynamicSystemRenderable::do_animate(float time)
 {
-    if (time - m_lastUpdateTime >= m_system->getDt()) {
-        //Dynamic system step
+    if (time - m_lastUpdateTime >= m_system->getDt() || time <= m_lastUpdateTime) {
         m_system->computeSimulationStep();
+        //Dynamic system step
         m_lastUpdateTime = time;
     }
 }
@@ -49,6 +49,9 @@ void DynamicSystemRenderable::do_keyPressedEvent(sf::Event &e)
             p->setPosition(pos);
         }
     } else if (e.key.code == sf::Keyboard::F5) {    //Reset the simulation
+        for (HierarchicalRenderablePtr c : getChildren()) {
+          c->keyPressedEvent(e);
+        }
         for (const ParticlePtr& p : m_system->getParticles()) {
             p->restart();
         }

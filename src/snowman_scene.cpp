@@ -1,7 +1,7 @@
 #include "../include/ShaderProgram.hpp"
 #include "../include/Viewer.hpp"
 #include "../include/FrameRenderable.hpp"
-#include "../include/lighting/DirectionalLightRenderable.hpp"
+#include "../include/lighting/Lights.hpp"
 
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
 #include "../include/texturing/TexturedCubeRenderable.hpp"
@@ -30,6 +30,9 @@
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 
+#include "../include/keyframes/KeyframedMeshRenderable.hpp"
+#include "../include/keyframes/GeometricTransformation.hpp"
+
 
 void initialize_snowman_scene(Viewer& viewer)
 {
@@ -51,10 +54,6 @@ void initialize_snowman_scene(Viewer& viewer)
     viewer.addShaderProgram(multiTexShader);
 
 
-    //Add a 3D frame to the viewer
-    FrameRenderablePtr frame = std::make_shared<FrameRenderable>(flatShader);
-    viewer.addRenderable(frame);
-
     //Initialize a dynamic system (Solver, Time step, Restitution coefficient)
     DynamicSystemPtr system = std::make_shared<DynamicSystem>();
     EulerExplicitSolverPtr solver = std::make_shared<EulerExplicitSolver>();
@@ -71,23 +70,39 @@ void initialize_snowman_scene(Viewer& viewer)
 
     //Define a directional light for the whole scene
     // glm::vec3 d_direction = glm::normalize(glm::vec3(-10.0,-1.5,-1.0));
-    glm::vec3 d_direction = glm::normalize(glm::vec3(0.0,1.5,-1.0));
-    glm::vec3 d_ambient(1.0,1.0,1.0), d_diffuse(1.0,1.0,1.0), d_specular(1.0,1.0,1.0);
+
+    glm::vec3 d_direction = glm::normalize(glm::vec3(-1.0,-1.0,0.0));
+    glm::vec3 d_ambient(2,2,2), d_diffuse(1.0,1.0,1.0), d_specular(1.0,1.0,1.0);
     DirectionalLightPtr directionalLight = std::make_shared<DirectionalLight>(d_direction, d_ambient, d_diffuse, d_specular);
     viewer.setDirectionalLight(directionalLight);
 
+
     // ---------- Textured plane -------------
+    filename = "../textures/ice_texture.png";
+    TexturedPlaneRenderablePtr texPlaneEnd = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(400.0,0,-200.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(1000.0,1000.0,1.0));
+    texPlaneEnd->setParentTransform(parentTransformation);
+    texPlaneEnd->setMaterial(snow);
+    viewer.addRenderable(texPlaneEnd);
+    // We add this textured plane as an obstacle
+    glm::vec3 planeNormal(0, 0, 1);
+    glm::vec3 planePoint(800, 0, -200);
+    PlanePtr groundEnd = std::make_shared<Plane>(planeNormal, planePoint);
+    system->addPlaneObstacle(groundEnd);
+
+
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
     float planeRotation = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(300.0,30.0,30.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(1000.0,1000.0,1.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(snow);
     viewer.addRenderable(texPlane);
     // We add this textured plane as an obstacle
-    glm::vec3 planeNormal(sin(planeRotation), 0, cos(planeRotation));
-    glm::vec3 planePoint(0, 0, 0);
+    planeNormal = glm::vec3(sin(planeRotation), 0, cos(planeRotation));
+    planePoint = glm::vec3(0, 0, 0);
     PlanePtr ground = std::make_shared<Plane>(planeNormal, planePoint);
     system->addPlaneObstacle(ground);
 
@@ -166,7 +181,7 @@ void initialize_snowman_scene(Viewer& viewer)
     glm::vec3 treePosition(10, 10, -tan(planeRotation)*10);
 
     filename = "../textures/tree_texture.png";
-    std::string leafFilename = "../textures/grass_texture.png";
+    std::string leafFilename = "../textures/grass_texture2.png";
     ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
     TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
     parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
@@ -176,6 +191,23 @@ void initialize_snowman_scene(Viewer& viewer)
 
 
     // -------------- Skybox ---------------
+    parentTransformation = glm::mat4(1.0);
+    filename = "../textures/sky.png";
+    TexturedCubeRenderablePtr skybox = std::make_shared<TexturedCubeRenderable>(texShader,filename);
+    localTransformation = glm::scale(skybox->getModelMatrix(), glm::vec3(1000.0,1000.0,1000.0));
+    skybox->setLocalTransform(localTransformation);
+    skybox->setParentTransform(parentTransformation);
+    skybox->setMaterial(pearl);
+    viewer.addRenderable(skybox);
+
+    filename = "../textures/bluesky.png";
+    TexturedCubeRenderablePtr sky = std::make_shared<TexturedCubeRenderable>(texShader,filename);
+    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(1000.0,1000.0,1.0));
+    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,500.0));
+    sky->setLocalTransform(localTransformation);
+    sky->setParentTransform(parentTransformation);
+    sky->setMaterial(pearl);
+    viewer.addRenderable(sky);
 
     // ----------- Slalom Gates -------------
     glm::vec3 gx(0.0, -3, 0.0);
@@ -183,7 +215,7 @@ void initialize_snowman_scene(Viewer& viewer)
     float gm = 100.0, gr = 1.0, ga = 0.0;
     glm::vec3 particleOffset(0, 0, 1.0);
 
-    int numberOfGates = 5;
+    int numberOfGates = 15;
     int spaceBetweenGates = 20;
     MaterialPtr redPlastic = Material::RedPlastic();
     MaterialPtr bluePlastic = Material::BluePlastic();
@@ -206,12 +238,14 @@ void initialize_snowman_scene(Viewer& viewer)
 
     TexturedSlalomGatePtr slalomGate;
     MaterialPtr gateMaterial;
+    float aleat;
     for (int gateNumber = 0; gateNumber < numberOfGates; gateNumber++) {
         if (gateNumber%2 == 1) {
-            gx = glm::vec3(spaceBetweenGates*(gateNumber+1), 7.0 + (rand()%10 - 5)/10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1));
+            aleat = (rand()%10 - 5)/10.0;
+            gx = glm::vec3(spaceBetweenGates*(gateNumber+1)+aleat, 7.0 + (rand()%40 - 20)/10.0, -tan(planeRotation)*(spaceBetweenGates*(gateNumber+1)+aleat));
             gateMaterial = redPlastic;
         } else {
-            gx = glm::vec3(spaceBetweenGates*(gateNumber+1), -7.0 - (rand()%10 - 5)/10.0, -tan(planeRotation)*spaceBetweenGates*(gateNumber+1));
+            gx = glm::vec3(spaceBetweenGates*(gateNumber+1)+aleat, -7.0 + (rand()%40 - 20)/10.0, -tan(planeRotation)*(spaceBetweenGates*(gateNumber+1)+aleat));
             gateMaterial = bluePlastic;
         }
         gateParticle = std::make_shared<Particle>(gx + particleOffset, gv, gm, gr, ga);
@@ -223,11 +257,59 @@ void initialize_snowman_scene(Viewer& viewer)
     viewer.addRenderable(startingGate);
 
 
+    // ----------- Airplane ----------
+    std::string filenameAirplaneMesh = "../meshes/bunny.obj";
+    std::string filenameAirplaneTexture = "../textures/texturedBunny.png";
+    auto airplane = std::make_shared<KeyframedMeshRenderable>(texShader, Material::Pearl(), filenameAirplaneMesh, filenameAirplaneTexture);
+    float heightInSky = -20;
+    glm::vec3 center(120.0 , 0.0, heightInSky);
+    float trajRadius = 30;
+    airplane->setParentTransform(glm::mat4(1.0));
+    airplane->setLocalTransform(glm::scale(glm::mat4(1.0), glm::vec3(3, 3, 3)));
+
+    //Keyframes on parent transformation: pairs of (time, transformation)
+    airplane->addParentTransformKeyframe(0.0, GeometricTransformation(center + glm::vec3(1.0, 0.0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(1.0, GeometricTransformation(center + glm::vec3(0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(2.0, GeometricTransformation(center + glm::vec3(0.0, 1, 0.0)*trajRadius, glm::angleAxis((float) (M_PI), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(3.0, GeometricTransformation(center + glm::vec3(-0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (5*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(4.0, GeometricTransformation(center + glm::vec3(-1, 0, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(5.0, GeometricTransformation(center + glm::vec3(-0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (7*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(6.0, GeometricTransformation(center + glm::vec3(0, -1, 0.0)*trajRadius, glm::angleAxis((float) (2*M_PI), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(7.0, GeometricTransformation(center + glm::vec3(0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (9*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(8.0, GeometricTransformation(center + glm::vec3(1, 0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    viewer.addRenderable(airplane);
+
+
+
+    // ---------- Boundaries ---------
+    planeNormal = glm::vec3(0, 1, 0);
+    planePoint = glm::vec3(0, -500, 0);
+    PlanePtr wall1 = std::make_shared<Plane>(planeNormal, planePoint);
+    system->addPlaneObstacle(wall1);
+
+    planeNormal = glm::vec3(1, 0, 0);
+    planePoint = glm::vec3(-500, 0, 0);
+    PlanePtr wall2 = std::make_shared<Plane>(planeNormal, planePoint);
+    system->addPlaneObstacle(wall2);
+
+    planeNormal = glm::vec3(0, -1, 0);
+    planePoint = glm::vec3(0, 500, 0);
+    PlanePtr wall3 = std::make_shared<Plane>(planeNormal, planePoint);
+    system->addPlaneObstacle(wall3);
+
+    planeNormal = glm::vec3(-1, 0, 0);
+    planePoint = glm::vec3(500, 0, 0);
+    PlanePtr wall4 = std::make_shared<Plane>(planeNormal, planePoint);
+    system->addPlaneObstacle(wall4);
+
+
+
     // ----------- Camera -------------
     // Position the camera with regards to the skiing snowman, it's then animated
     // using its velocity and position
     viewer.getCamera().setViewMatrix( glm::lookAt( glm::vec3(-8, 0, 8 ) + px, px, glm::vec3( 0, 0, 1 ) ) );
     // Control it by the snowman
     viewer.setGuidingRenderable(snowmanMvt);
+    viewer.setAnimationLoop(true, 8.0);
     viewer.startAnimation();
 }

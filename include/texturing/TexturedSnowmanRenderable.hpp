@@ -16,6 +16,18 @@ class TexturedSnowmanRenderable : public HierarchicalRenderable
 
     void setMaterial(const MaterialPtr& material);
 
+    void do_keyPressedEvent(sf::Event& e) override
+    {
+      switch(e.key.code)
+      {
+        case sf::Keyboard::F5:
+          m_snowman->setAngle(0.0);
+          break;
+        default:
+          break;
+      }
+    }
+
     private:
         void do_draw();
         void do_animate(float time);

@@ -169,6 +169,7 @@ void Viewer::animate()
 {
     if(m_animationIsStarted)
     {
+    // std::cout << "JEPASSELA" << std::endl;
         if(m_animationLoop && getTime()>=m_loopDuration)
             resetAnimation();
 
@@ -231,8 +232,9 @@ void Viewer::keyPressedEvent(sf::Event& e)
             break;
         case sf::Keyboard::F5:
             resetAnimation();
+            getCamera().setOldVelocity(glm::vec3(0.0,0.0,0.0));
             for(RenderablePtr r : m_renderables)
-                r->keyPressedEvent(e);
+                r->do_keyPressedEvent(e);
             break;
         case sf::Keyboard::W:
             if( e.key.control )
