@@ -1,5 +1,5 @@
-#ifndef TEXTURED_PLANE_RENDERABLE_HPP
-#define TEXTURED_PLANE_RENDERABLE_HPP
+#ifndef TEXTURED_GROUND_RENDERABLE_HPP
+#define TEXTURED_GROUND_RENDERABLE_HPP
 
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
@@ -8,11 +8,12 @@
 
 /* Stand-alone class, without inheritance from existing objects */
 
-class TexturedPlaneRenderable : public HierarchicalRenderable
+class TexturedGroundRenderable : public HierarchicalRenderable
 {
 public:
-    ~TexturedPlaneRenderable();
-    TexturedPlaneRenderable(ShaderProgramPtr shaderProgram, const std::string& textureFilename);
+    float getMatriceElevation(int x, int y);
+    ~TexturedGroundRenderable();
+    TexturedGroundRenderable(ShaderProgramPtr shaderProgram, const std::string& textureFilename);
     void setMaterial(const MaterialPtr& material);
 
 private:
@@ -25,8 +26,11 @@ private:
     std::vector< glm::vec3 > m_normals;
     std::vector< glm::vec2 > m_texCoords;
     std::vector< glm::vec2 > m_origTexCoords;
+    std::vector< glm::vec4 > m_colors;
+
 
     unsigned int m_pBuffer;
+    unsigned int m_cBuffer;
     unsigned int m_nBuffer;
     unsigned int m_tBuffer;
     unsigned int m_texId;
@@ -37,6 +41,6 @@ private:
     MaterialPtr m_material;
 };
 
-typedef std::shared_ptr<TexturedPlaneRenderable> TexturedPlaneRenderablePtr;
+typedef std::shared_ptr<TexturedGroundRenderable> TexturedGroundRenderablePtr;
 
 #endif

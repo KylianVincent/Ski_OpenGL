@@ -37,9 +37,9 @@ void Camera::animate(float time, ParticlePtr guidingRenderable)
         velocity = glm::vec3 (1.0, 0, 0);
     } else if (glm::length(velocity - m_oldVelocity) >= 2) {
         //std::cout << "IPASS" << std::endl;
-        velocity = (30.0f*m_oldVelocity + velocity)/31.0f;
+        velocity = (100.0f*m_oldVelocity + velocity)/101.0f;
     }
-    visionAngle = -8.0f*glm::normalize(velocity) + glm::vec3(0, 0, 8) + px;
+    visionAngle = -10.0f*glm::normalize(velocity) + glm::vec3(0, 0, 5) + px;
 
     // // Using position direction
     // glm::vec3 visionAngle = 8.0f*glm::vec3(-cos(guidingRenderable->getAngle()), -sin(guidingRenderable->getAngle()), 1) + px;

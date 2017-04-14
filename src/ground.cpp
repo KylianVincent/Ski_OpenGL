@@ -4,6 +4,7 @@
 #include "../include/MeshRenderable.hpp"
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 
+#include "../include/texturing/TexturedGroundRenderable.hpp"
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
 #include "../include/texturing/TexturedCubeRenderable.hpp"
 #include "../include/texturing/MultiTexturedCubeRenderable.hpp"
@@ -29,8 +30,6 @@
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 
 void initialize_ground_scene(Viewer& viewer)
-
-
 {
     // create all shaders of this scene, then add them to the viewer
     ShaderProgramPtr flatShader
@@ -76,14 +75,12 @@ void initialize_ground_scene(Viewer& viewer)
     DirectionalLightPtr directionalLight = std::make_shared<DirectionalLight>(d_direction, d_ambient, d_diffuse, d_specular);
     viewer.setDirectionalLight(directionalLight);
 
-
-    //Textured plane
-    filename = "../textures/ice_texture.png";
-    TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
-    parentTransformation = glm::scale(glm::mat4(1.0), glm::vec3(10.0,10.0,10.0));
-    texPlane->setParentTransform(parentTransformation);
-    texPlane->setMaterial(pearl);
-    viewer.addRenderable(texPlane);
+    //Textured Ground
+    filename = "../textures/snow_texture.png";
+    TexturedGroundRenderablePtr texGround = std::make_shared<TexturedGroundRenderable>(texShader, filename);
+    texGround->setParentTransform(parentTransformation);
+    texGround->setMaterial(pearl);
+    viewer.addRenderable(texGround);
 
 
     //Textured Tree
