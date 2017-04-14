@@ -160,7 +160,7 @@ void initialize_snowman_scene(Viewer& viewer)
     TexturedGroundRenderablePtr texGroundLeft = std::make_shared<TexturedGroundRenderable>(texShader, filename);
     float planeRotationLeft = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotationLeft, glm::vec3(0.0, 1.0, 0.0));
-    parentTransformation = glm::translate(parentTransformation, glm::vec3(0.0,-50.0,sin(planeRotationLeft)*25.0));
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(250.0,-50.0,sin(planeRotationLeft)*25.0));
     parentTransformation = glm::rotate(parentTransformation, planeRotationLeft, glm::vec3(-1, 0.0, 0.0));
     texGroundLeft->setParentTransform(parentTransformation);
     texGroundLeft->setMaterial(snow);
@@ -169,29 +169,28 @@ void initialize_snowman_scene(Viewer& viewer)
     TexturedGroundRenderablePtr texGroundRight = std::make_shared<TexturedGroundRenderable>(texShader, filename);
     float planeRotationRight = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotationRight, glm::vec3(0.0, 1.0, 0.0));
-    parentTransformation = glm::translate(parentTransformation, glm::vec3(0.0,50.0,sin(planeRotationRight)*25.0));
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(250.0,50.0,sin(planeRotationRight)*25.0));
     parentTransformation = glm::rotate(parentTransformation, planeRotationRight, glm::vec3(1.0, 0.0, 0.0));
     texGroundRight->setParentTransform(parentTransformation);
     texGroundRight->setMaterial(snow);
     viewer.addRenderable(texGroundRight);
 
     // --------------- Trees ---------------
-    for (int k=0; k<10; k++){
+    for (int k=0; k<40; k++){
         int x = rand()%500;
-        int y = rand()%160;
+        int y = rand()%80;
         glm::vec3 tv(0.0, 0.0, 0.0);
         float tm = 1.0, tr = 2.5, ta = 0.0;
         glm::vec3 treeOffset(0, 0, 1.0);
         glm::vec3 treePosition;
-        if(y<100){
-          std::cout << texGroundRight->getMatriceElevation(x,y) << std::endl;
+        if(y<40){
           treePosition = glm::vec3(x, y+28,y*tan(planeRotationRight+0.05)- x*tan(planeRotation));//+ texGroundRight->getMatriceElevation(x,y)) ;
         }else{
-          treePosition = glm::vec3(x,-y-28,y*tan(planeRotationRight+0.05)- x*tan(planeRotation));
+          treePosition = glm::vec3(x,-y-28+40,(y-40)*tan(planeRotationRight+0.05)- x*tan(planeRotation));
         }
 
         filename = "../textures/tree_texture.png";
-        std::string leafFilename = "../textures/grass_texture.png";
+        std::string leafFilename = "../textures/grass_texture2.png";
         ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
         TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
         parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
