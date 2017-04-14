@@ -11,6 +11,7 @@
 #include "../include/texturing/TexturedSnowmanRenderable.hpp"
 #include "../include/texturing/TexturedSlalomGate.hpp"
 #include "../include/texturing/TexturedTruncRenderable.hpp"
+#include "../include/texturing/TexturedGroundRenderable.hpp"
 #include "../include/lighting/LightedCylinderRenderable.hpp"
 
 #include "../include/dynamics/DynamicSystem.hpp"
@@ -139,7 +140,24 @@ void initialize_snowman_scene(Viewer& viewer)
     system->addForceField(gravityForceField);
 
     // ----------- Mountains ---------------
+    filename = "../textures/ice_texture.png";
+    TexturedGroundRenderablePtr texGroundLeft = std::make_shared<TexturedGroundRenderable>(texShader, filename);
+    float planeRotationLeft = (float)M_PI/7.0f;
+    parentTransformation = glm::rotate(glm::mat4(1.0), planeRotationLeft, glm::vec3(0.0, 1.0, 0.0));
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0.0,-37.0,sin(planeRotationLeft)*25.0));
+    parentTransformation = glm::rotate(parentTransformation, planeRotationLeft, glm::vec3(-1, 0.0, 0.0));
+    texGroundLeft->setParentTransform(parentTransformation);
+    texGroundLeft->setMaterial(snow);
+    viewer.addRenderable(texGroundLeft);
 
+    TexturedGroundRenderablePtr texGroundRight = std::make_shared<TexturedGroundRenderable>(texShader, filename);
+    float planeRotationRight = (float)M_PI/7.0f;
+    parentTransformation = glm::rotate(glm::mat4(1.0), planeRotationRight, glm::vec3(0.0, 1.0, 0.0));
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(0.0,37.0,sin(planeRotationRight)*25.0));
+    parentTransformation = glm::rotate(parentTransformation, planeRotationRight, glm::vec3(1.0, 0.0, 0.0));
+    texGroundRight->setParentTransform(parentTransformation);
+    texGroundRight->setMaterial(snow);
+    viewer.addRenderable(texGroundRight);
 
     // --------------- Trees ---------------
     glm::vec3 tv(0.0, 0.0, 0.0);

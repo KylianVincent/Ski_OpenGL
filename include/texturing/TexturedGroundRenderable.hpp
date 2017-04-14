@@ -25,8 +25,11 @@ private:
     std::vector< glm::vec3 > m_normals;
     std::vector< glm::vec2 > m_texCoords;
     std::vector< glm::vec2 > m_origTexCoords;
+    std::vector< glm::vec4 > m_colors;
+
 
     unsigned int m_pBuffer;
+    unsigned int m_cBuffer;
     unsigned int m_nBuffer;
     unsigned int m_tBuffer;
     unsigned int m_texId;

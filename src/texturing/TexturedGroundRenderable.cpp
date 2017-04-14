@@ -9,12 +9,13 @@
 #include <SFML/Graphics/Image.hpp>
 #include <iostream>
 
-const int taille = 100;
+const int tailleX = 300;
+const int tailleY = 50;
 
-void initinlizeMatriceElevation(float mat[][taille])
+void initinlizeMatriceElevation(float mat[][tailleY])
 {
-  for (int i=0; i<taille; i++){
-    for (int j=0; j<taille; j++){
+  for (int i=0; i<tailleX; i++){
+    for (int j=0; j<tailleY; j++){
       mat[i][j] = 0;
     }
   }
@@ -87,49 +88,6 @@ float Get2DPerlinNoiseValue(float x, float y, float res)
 
 }
 
-
-
-void recursive_Elevation(float matriceElevation[][taille], int x, int y, int decalage, int profondeur )
-{
-  if (profondeur == 0 ){
-    return;
-  }
-  matriceElevation[x][y]=Get2DPerlinNoiseValue((float)x,(float)y, profondeur+10)*100;
-    std::cout << std::endl << "Notre bruit de perlin " << matriceElevation[x][y] << std::endl;
-  float gdistance;
-  float pdistance;
-  float a;
-  float b;
-  int interX;
-  int interY;
-  int pasx;
-  int pasy;
-  for (int i=0; i<4*decalage; i++){
-    for (int j=0; j<4*decalage; j++){
-      if(x != i && y !=j){
-        pasx = abs(x-i)/x-i;
-        pasy = abs(y-j)/y-j;
-        a = (y-j)/(x-i);
-        b = y-a*x;
-        interX=x;
-        interY=y;
-        while(interX > x-2*decalage && interX < x+2*decalage && interY > y-2*decalage && interY < y+2*decalage){
-          interX += pasx;
-          interY += pasy;
-        }
-        pdistance = sqrt(pow((i-x),2)+pow((j-y),2));
-        gdistance = sqrt(pow((interX-x),2)+pow((interY-y),2));
-        matriceElevation[i][j]=matriceElevation[x][y]*(gdistance-pdistance)/gdistance + matriceElevation[interX][interY]*pdistance/gdistance;
-      }
-    }
-  }
-  recursive_Elevation(matriceElevation,x/2,y/2,decalage/2,profondeur-1);
-  recursive_Elevation(matriceElevation,x/2+decalage,y/2,decalage/2,profondeur-1);
-  recursive_Elevation(matriceElevation,x/2,y/2+decalage,decalage/2,profondeur-1);
-  recursive_Elevation(matriceElevation,x/2+decalage,y/2+decalage,decalage/2,profondeur-1);
-
-}
-
 TexturedGroundRenderable::TexturedGroundRenderable(
         ShaderProgramPtr shaderProgram, const std::string& textureFilename)
     : HierarchicalRenderable(shaderProgram),
@@ -138,45 +96,107 @@ TexturedGroundRenderable::TexturedGroundRenderable(
 {
 
 
-  float matriceElevation[taille][taille];
+  float matriceElevation[tailleX][tailleY];
   initinlizeMatriceElevation(matriceElevation);
-  //recursive_Elevation(matriceElevation, taille/2, taille/2, taille/4, 1);
   float test;
-  for (int i=0; i<taille; i++){
-    for (int j=0; j<taille; j++){
-      test =Get2DPerlinNoiseValue((float)i,(float)j,20)*5;
-      std::cout << "Bruit de Perlin : " << test <<  std::endl;
+  for (int i=0; i<tailleX; i++){
+    for (int j=0; j<tailleY; j++){
+      test =Get2DPerlinNoiseValue((float)i,(float)j,10)*5;
       matriceElevation[i][j] = test;
     }
   }
-  std::cout << std::endl << "On a fait notre matrice d'élévation " <<  std::endl;
 
     // Initialize geometry
-    m_positions.resize(6*taille*taille, glm::vec3(0.0,0.0,0.0));
-    m_normals.resize(6*taille*taille, glm::vec3(0.0,0.0,0.0));
-    m_texCoords.resize(6*taille*taille, glm::vec2(0.0,0.0));
-    std::cout << std::endl << "On a recize nos vecteurs " <<  std::endl;
-    for (int i=0; i<taille-1; i++){
-          for (int j=0; j<taille-1; j++){
+    m_positions.resize(6*tailleX*tailleY, glm::vec3(0.0,0.0,0.0));
+    m_normals.resize(6*tailleX*tailleY, glm::vec3(0.0,0.0,0.0));
+    m_texCoords.resize(6*tailleX*tailleY, glm::vec2(0.0,0.0));
+    glm::vec3 ptg = glm::vec3(0,0,0);
+    glm::vec3 ptd = glm::vec3(0,0,0);
+    glm::vec3 pth = glm::vec3(0,0,0);
+    glm::vec3 ptb = glm::vec3(0,0,0);
+    glm::vec3 ptc = glm::vec3(0,0,0);
+
+
+    for (int i=1; i<tailleX-2; i++){
+          for (int j=1; j<tailleY-2; j++){
             //1er face du "carré"
-            m_positions.push_back(glm::vec3(i-taille/2,j-taille/2,matriceElevation[i][j]));
-            m_positions.push_back(glm::vec3(i-taille/2,j+1-taille/2,matriceElevation[i][j+1]));
-            m_positions.push_back(glm::vec3(i+1-taille/2,j-taille/2,matriceElevation[i+1][j]));
+            m_positions.push_back(glm::vec3(i-tailleX/2,j-tailleY/2,matriceElevation[i][j]));
+            m_positions.push_back(glm::vec3(i-tailleX/2,j+1-tailleY/2,matriceElevation[i][j+1]));
+            m_positions.push_back(glm::vec3(i+1-tailleX/2,j-tailleY/2,matriceElevation[i+1][j]));
 
             m_texCoords.push_back(glm::vec2(0.0,0.0));
             m_texCoords.push_back(glm::vec2(0.0,1.0));
             m_texCoords.push_back(glm::vec2(1.0,1.0));
 
+            ptg = glm::vec3(i-1,j,matriceElevation[i-1][j]);
+            ptd = glm::vec3(i+1,j,matriceElevation[i+1][j]);
+            pth = glm::vec3(i,j+1,matriceElevation[i][j+1]);
+            ptb = glm::vec3(i,j-1,matriceElevation[i][j-1]);
+            ptc = glm::vec3(i,j,matriceElevation[i][j]);
+            m_normals.push_back(glm::normalize(glm::normalize(cross(ptg-ptc,ptb-ptc))
+                                              +glm::normalize(cross(ptb-ptc,ptd-ptc))
+                                              +glm::normalize(cross(ptd-ptc,pth-ptc))
+                                              +glm::normalize(cross(pth-ptc,ptg-ptc)) ));
+
+            ptg = glm::vec3(i-1,j+1,matriceElevation[i-1][j+1]);
+            ptd = glm::vec3(i+1,j+1,matriceElevation[i+1][j+1]);
+            pth = glm::vec3(i,j+2,matriceElevation[i][j+2]);
+            ptb = glm::vec3(i,j,matriceElevation[i][j]);
+            ptc = glm::vec3(i,j+1,matriceElevation[i][j+1]);
+            m_normals.push_back(glm::normalize(glm::normalize(cross(ptg-ptc,ptb-ptc))
+                                              +glm::normalize(cross(ptb-ptc,ptd-ptc))
+                                              +glm::normalize(cross(ptd-ptc,pth-ptc))
+                                              +glm::normalize(cross(pth-ptc,ptg-ptc)) ));
+
+            ptg = glm::vec3(i,j,matriceElevation[i][j]);
+            ptd = glm::vec3(i+2,j,matriceElevation[i+2][j]);
+            pth = glm::vec3(i+1,j+1,matriceElevation[i+1][j+1]);
+            ptb = glm::vec3(i+1,j-1,matriceElevation[i+1][j-1]);
+            ptc = glm::vec3(i+1,j,matriceElevation[i+1][j]);
+            m_normals.push_back(glm::normalize(glm::normalize(cross(ptg-ptc,ptb-ptc))
+                                              +glm::normalize(cross(ptb-ptc,ptd-ptc))
+                                              +glm::normalize(cross(ptd-ptc,pth-ptc))
+                                              +glm::normalize(cross(pth-ptc,ptg-ptc)) ));
 
 
             //2eme face du "carré"
-            m_positions.push_back(glm::vec3(i-taille/2,j+1-taille/2,matriceElevation[i][j+1]));
-            m_positions.push_back(glm::vec3(i+1-taille/2,j-taille/2,matriceElevation[i+1][j]));
-            m_positions.push_back(glm::vec3(i+1-taille/2,j+1-taille/2,matriceElevation[i+1][j+1]));
+            m_positions.push_back(glm::vec3(i-tailleX/2,j+1-tailleY/2,matriceElevation[i][j+1]));
+            m_positions.push_back(glm::vec3(i+1-tailleX/2,j-tailleY/2,matriceElevation[i+1][j]));
+            m_positions.push_back(glm::vec3(i+1-tailleX/2,j+1-tailleY/2,matriceElevation[i+1][j+1]));
 
             m_texCoords.push_back(glm::vec2(0.0,0.0));
             m_texCoords.push_back(glm::vec2(1.0,1.0));
             m_texCoords.push_back(glm::vec2(0.0,1.0));
+
+            ptg = glm::vec3(i-1,j+1,matriceElevation[i-1][j+1]);
+            ptd = glm::vec3(i+1,j+1,matriceElevation[i+1][j+1]);
+            pth = glm::vec3(i,j+2,matriceElevation[i][j+2]);
+            ptb = glm::vec3(i,j,matriceElevation[i][j]);
+            ptc = glm::vec3(i,j+1,matriceElevation[i][j+1]);
+            m_normals.push_back(glm::normalize(glm::normalize(cross(ptg-ptc,ptb-ptc))
+                                              +glm::normalize(cross(ptb-ptc,ptd-ptc))
+                                              +glm::normalize(cross(ptd-ptc,pth-ptc))
+                                              +glm::normalize(cross(pth-ptc,ptg-ptc)) ));
+
+            ptg = glm::vec3(i,j,matriceElevation[i][j]);
+            ptd = glm::vec3(i+2,j,matriceElevation[i+2][j]);
+            pth = glm::vec3(i+1,j+1,matriceElevation[i+1][j+1]);
+            ptb = glm::vec3(i+1,j-1,matriceElevation[i+1][j-1]);
+            ptc = glm::vec3(i+1,j,matriceElevation[i+1][j]);
+            m_normals.push_back(glm::normalize(glm::normalize(cross(ptg-ptc,ptb-ptc))
+                                              +glm::normalize(cross(ptb-ptc,ptd-ptc))
+                                              +glm::normalize(cross(ptd-ptc,pth-ptc))
+                                              +glm::normalize(cross(pth-ptc,ptg-ptc)) ));
+
+            ptg = glm::vec3(i,j+1,matriceElevation[i][j+1]);
+            ptd = glm::vec3(i+2,j+1,matriceElevation[i+2][j+1]);
+            pth = glm::vec3(i+1,j+2,matriceElevation[i+1][j+2]);
+            ptb = glm::vec3(i+1,j,matriceElevation[i+1][j]);
+            ptc = glm::vec3(i+1,j+1,matriceElevation[i+1][j+1]);
+            m_normals.push_back(glm::normalize(glm::normalize(cross(ptg-ptc,ptb-ptc))
+                                              +glm::normalize(cross(ptb-ptc,ptd-ptc))
+                                              +glm::normalize(cross(ptd-ptc,pth-ptc))
+                                              +glm::normalize(cross(pth-ptc,ptg-ptc)) ));
           }
     }
 
@@ -185,8 +205,8 @@ TexturedGroundRenderable::TexturedGroundRenderable(
     //Create buffers
     glGenBuffers(1, &m_pBuffer); //vertices
     glGenBuffers(1, &m_nBuffer); //normals
-
     //Activate buffer and send data to the graphics card
+    glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_pBuffer));
     glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_pBuffer));
     glcheck(glBufferData(GL_ARRAY_BUFFER, m_positions.size()*sizeof(glm::vec3), m_positions.data(), GL_STATIC_DRAW));
     glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_nBuffer));
@@ -294,7 +314,6 @@ void TexturedGroundRenderable::do_draw()
     if (normalLocation != ShaderProgram::null_location) {
         glcheck(glDisableVertexAttribArray(normalLocation));
     }
-
     if (texCoordLocation != ShaderProgram::null_location) {
         glcheck(glDisableVertexAttribArray(texCoordLocation));
         glcheck(glBindTexture(GL_TEXTURE_2D, 0));   // unbind the texture!

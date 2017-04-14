@@ -10,7 +10,7 @@
 
 class TexturedPlaneRenderable : public HierarchicalRenderable
 {
-public :
+public:
     ~TexturedPlaneRenderable();
     TexturedPlaneRenderable(ShaderProgramPtr shaderProgram, const std::string& textureFilename);
     void setMaterial(const MaterialPtr& material);
