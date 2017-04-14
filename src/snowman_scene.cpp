@@ -291,15 +291,15 @@ void initialize_snowman_scene(Viewer& viewer)
     airplane->setLocalTransform(localTransformation*glm::scale(glm::mat4(1.0), glm::vec3(3, 3, 3)));
 
     //Keyframes on parent transformation: pairs of (time, transformation)
-    airplane->addParentTransformKeyframe(0.0, GeometricTransformation(center + glm::vec3(1.0, 0.0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(1.0, GeometricTransformation(center + glm::vec3(0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(2.0, GeometricTransformation(center + glm::vec3(0.0, 1, 0.0)*trajRadius, glm::angleAxis((float) (M_PI), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(3.0, GeometricTransformation(center + glm::vec3(-0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (5*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(4.0, GeometricTransformation(center + glm::vec3(-1, 0, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(5.0, GeometricTransformation(center + glm::vec3(-0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (7*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(6.0, GeometricTransformation(center + glm::vec3(0, -1, 0.0)*trajRadius, glm::angleAxis((float) (2*M_PI), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(7.0, GeometricTransformation(center + glm::vec3(0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (9*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
-    airplane->addParentTransformKeyframe(8.0, GeometricTransformation(center + glm::vec3(1, 0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(0.0, GeometricTransformation(center + glm::vec3(1.0, 0.0, 0.0)*trajRadius, glm::angleAxis((float) (0), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(1.0, GeometricTransformation(center + glm::vec3(0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(2.0, GeometricTransformation(center + glm::vec3(0.0, 1, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(3.0, GeometricTransformation(center + glm::vec3(-0.7, 0.7, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(4.0, GeometricTransformation(center + glm::vec3(-1, 0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(5.0, GeometricTransformation(center + glm::vec3(-0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (5*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(6.0, GeometricTransformation(center + glm::vec3(0, -1, 0.0)*trajRadius, glm::angleAxis((float) (3*M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(7.0, GeometricTransformation(center + glm::vec3(0.7, -0.7, 0.0)*trajRadius, glm::angleAxis((float) (7*M_PI/4.0f), glm::vec3(0.0, 0.0, 1.0))));
+    airplane->addParentTransformKeyframe(8.0, GeometricTransformation(center + glm::vec3(1, 0, 0.0)*trajRadius, glm::angleAxis((float) (2*M_PI), glm::vec3(0.0, 0.0, 1.0))));
     viewer.addRenderable(airplane);
 
 

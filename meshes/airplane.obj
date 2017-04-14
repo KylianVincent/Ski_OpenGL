@@ -1,6 +1,5 @@
 # Blender v2.77 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib airplane.mtl
 o paper_airplane
 v -0.416884 0.963516 -1.184841
 v -0.398280 1.046273 -0.580426

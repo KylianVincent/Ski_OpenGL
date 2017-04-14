@@ -25,7 +25,7 @@ TexturedSnowmanRenderable::TexturedSnowmanRenderable(ShaderProgramPtr shaderProg
           m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0)
 {
     // ----------- Body ------------------
-    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 10);
+    teachers::getUnitSphereTextured(m_positions, m_normals, m_texCoords, 10, 30);
 
     m_model = glm::mat4(1.0);
 
