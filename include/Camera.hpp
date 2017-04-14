@@ -235,7 +235,6 @@ public:
      */
     void setZnear( const float& v );
     ///@}
-
     void setOldVelocity(const glm::vec3& v);
 
     /** @brief Reaction to mouse displacement.

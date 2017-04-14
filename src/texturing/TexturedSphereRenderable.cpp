@@ -137,3 +137,8 @@ void TexturedSphereRenderable::do_draw()
 void TexturedSphereRenderable::do_animate(float time)
 {
 }
+
+void TexturedSphereRenderable::setMaterial(const MaterialPtr& material)
+{
+    m_material = material;
+}

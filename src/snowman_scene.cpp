@@ -10,6 +10,7 @@
 #include "../include/texturing/TexturedMeshRenderable.hpp"
 #include "../include/texturing/TexturedSnowmanRenderable.hpp"
 #include "../include/texturing/TexturedSlalomGate.hpp"
+#include "../include/texturing/TexturedSphereRenderable.hpp"
 #include "../include/texturing/TexturedTruncRenderable.hpp"
 #include "../include/texturing/TexturedGroundRenderable.hpp"
 #include "../include/lighting/LightedCylinderRenderable.hpp"
@@ -81,7 +82,7 @@ void initialize_snowman_scene(Viewer& viewer)
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlaneEnd = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
     parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(400.0,0,-200.0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(1000.0,1000.0,1.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(500.0,500.0,1.0));
     texPlaneEnd->setParentTransform(parentTransformation);
     texPlaneEnd->setMaterial(snow);
     viewer.addRenderable(texPlaneEnd);
@@ -96,7 +97,7 @@ void initialize_snowman_scene(Viewer& viewer)
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
     float planeRotation = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(1000.0,1000.0,1.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(500.0,500.0,1.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(snow);
     viewer.addRenderable(texPlane);
@@ -175,48 +176,32 @@ void initialize_snowman_scene(Viewer& viewer)
     viewer.addRenderable(texGroundRight);
 
     // --------------- Trees ---------------
-    for (int k=0; k<1; k++){
-        int x = 0;
-        int y = rand()%50;
-        glm::vec3 tv(0.0, 0.0, 0.0);
-        float tm = 1.0, tr = 2.5, ta = 0.0;
-        glm::vec3 treeOffset(0, 0, 1.0);
-        glm::vec3 treePosition;
-        if(y<50){
-          treePosition = glm::vec3(x, y+25, -x*sin(planeRotation) +(y+25)*sin(planeRotationLeft) + texGroundRight->getMatriceElevation(x,y)) ;
-        }else{
-          treePosition = glm::vec3(x,-y+25,-x*sin(planeRotation) +(y-50)*sin(planeRotationRight) + texGroundLeft->getMatriceElevation(x,y));
-        }
-
-        filename = "../textures/tree_texture.png";
-        std::string leafFilename = "../textures/grass_texture.png";
-        ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
-        TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
-        parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
-        parentTransformation = glm::scale(parentTransformation, glm::vec3(0.3, 0.3, 0.4));
-        tronc->setParentTransform(parentTransformation);
-        viewer.addRenderable(tronc);
-    }
+    // filename = "../textures/tree_texture.png";
+    // std::string leafFilename = "../textures/grass_texture2.png";
+    // for (int k=0; k<10; k++){
+    //     glm::vec3 tv(0.0, 0.0, 0.0);
+    //     float tm = 1.0, tr = 2.5, ta = 0.0;
+    //     glm::vec3 treeOffset(0, 0, 0.0);
+    //     glm::vec3 treePosition;
+    //
+    //
+    //     ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
+    //     TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
+    //     parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
+    //     tronc->setParentTransform(parentTransformation);
+    //     viewer.addRenderable(tronc);
+    // }
 
 
     // -------------- Skybox ---------------
     parentTransformation = glm::mat4(1.0);
     filename = "../textures/sky.png";
-    TexturedCubeRenderablePtr skybox = std::make_shared<TexturedCubeRenderable>(texShader,filename);
-    localTransformation = glm::scale(skybox->getModelMatrix(), glm::vec3(1000.0,1000.0,1000.0));
+    TexturedSphereRenderablePtr skybox = std::make_shared<TexturedSphereRenderable>(texShader,filename);
+    localTransformation = glm::scale(skybox->getModelMatrix(), glm::vec3(500.0,500.0,500.0));
     skybox->setLocalTransform(localTransformation);
     skybox->setParentTransform(parentTransformation);
     skybox->setMaterial(pearl);
     viewer.addRenderable(skybox);
-
-    filename = "../textures/bluesky.png";
-    TexturedCubeRenderablePtr sky = std::make_shared<TexturedCubeRenderable>(texShader,filename);
-    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(1000.0,1000.0,1.0));
-    parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,500.0));
-    sky->setLocalTransform(localTransformation);
-    sky->setParentTransform(parentTransformation);
-    sky->setMaterial(pearl);
-    viewer.addRenderable(sky);
 
     // ----------- Slalom Gates -------------
     glm::vec3 gx(0.0, -3, 0.0);
@@ -286,14 +271,17 @@ void initialize_snowman_scene(Viewer& viewer)
 
 
     // ----------- Airplane ----------
-    std::string filenameAirplaneMesh = "../meshes/bunny.obj";
-    std::string filenameAirplaneTexture = "../textures/texturedBunny.png";
+    std::string filenameAirplaneMesh = "../meshes/airplane.obj";
+    std::string filenameAirplaneTexture = "../textures/airplane.png";
     auto airplane = std::make_shared<KeyframedMeshRenderable>(texShader, Material::Pearl(), filenameAirplaneMesh, filenameAirplaneTexture);
     float heightInSky = -20;
     glm::vec3 center(120.0 , 0.0, heightInSky);
     float trajRadius = 30;
+    float paperangle =(float)M_PI/2.0f;
     airplane->setParentTransform(glm::mat4(1.0));
-    airplane->setLocalTransform(glm::scale(glm::mat4(1.0), glm::vec3(3, 3, 3)));
+    airplane->setMaterial(pearl);
+    localTransformation = glm::rotate(glm::mat4(1.0), paperangle, glm::vec3(1.0, 0.0, 0.0));
+    airplane->setLocalTransform(localTransformation*glm::scale(glm::mat4(1.0), glm::vec3(3, 3, 3)));
 
     //Keyframes on parent transformation: pairs of (time, transformation)
     airplane->addParentTransformKeyframe(0.0, GeometricTransformation(center + glm::vec3(1.0, 0.0, 0.0)*trajRadius, glm::angleAxis((float) (M_PI/2.0f), glm::vec3(0.0, 0.0, 1.0))));
