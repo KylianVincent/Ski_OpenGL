@@ -88,5 +88,6 @@ void initialize_ground_scene(Viewer& viewer)
     //TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename);
     //viewer.addRenderable(tronc);
 
+
     viewer.startAnimation();
 }
