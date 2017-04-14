@@ -239,6 +239,25 @@ void initialize_snowman_scene(Viewer& viewer)
     viewer.addRenderable(startingGate);
 
 
+    // Flocons sur piste
+//    int nombreDeFlocons = 500;
+//    float x;
+//    float y;
+//    for (int i = 0; i < nombreDeFlocons; i++) {
+//        x = (rand()%700 - 100);
+//        y = (rand()%20 - 10);
+//        glm::vec3 fx(x, y, -tan(planeRotation)*x + 10);
+//        glm::vec3 fv(0.0, 0.0, 0.0);
+//        float fm = 10, fr = 0.3, fa = 0.0;
+//        ParticlePtr part = std::make_shared<Particle>(fx, fv, fm, fr, fa);
+//        part->setFixed(false);
+//        ParticleRenderablePtr partRend = std::make_shared<ParticleRenderable>(texShader, part);
+//        parentTransformation = glm::translate(glm::mat4(1.0), fx);
+//        partRend->setParentTransform(parentTransformation);
+//        HierarchicalRenderable::addChild(systemRenderable, partRend);
+//    }
+
+
     // ----------- Airplane ----------
     std::string filenameAirplaneMesh = "../meshes/bunny.obj";
     std::string filenameAirplaneTexture = "../textures/texturedBunny.png";

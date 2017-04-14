@@ -86,10 +86,10 @@ void initialize_ground_scene(Viewer& viewer)
 
 
     //Textured Tree
-    filename = "../textures/tree_texture.png";
-    std::string leafFilename = "../textures/grass_texture.png";
-    TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename);
-    viewer.addRenderable(tronc);
+//    filename = "../textures/tree_texture.png";
+//    std::string leafFilename = "../textures/grass_texture.png";
+//    TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename);
+//    viewer.addRenderable(tronc);
 
     viewer.startAnimation();
 }
