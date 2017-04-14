@@ -82,7 +82,7 @@ void initialize_snowman_scene(Viewer& viewer)
     filename = "../textures/ice_texture.png";
     TexturedPlaneRenderablePtr texPlaneEnd = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
     parentTransformation = glm::translate(glm::mat4(1.0), glm::vec3(400.0,0,-200.0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(500.0,500.0,1.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(1000.0,1000.0,1.0));
     texPlaneEnd->setParentTransform(parentTransformation);
     texPlaneEnd->setMaterial(snow);
     viewer.addRenderable(texPlaneEnd);
@@ -97,7 +97,7 @@ void initialize_snowman_scene(Viewer& viewer)
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
     float planeRotation = (float)M_PI/7.0f;
     parentTransformation = glm::rotate(glm::mat4(1.0), planeRotation, glm::vec3(0, 1, 0));
-    parentTransformation = glm::scale(parentTransformation, glm::vec3(500.0,500.0,1.0));
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(1000.0,1000.0,1.0));
     texPlane->setParentTransform(parentTransformation);
     texPlane->setMaterial(snow);
     viewer.addRenderable(texPlane);
