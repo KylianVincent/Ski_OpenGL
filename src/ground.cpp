@@ -1,6 +1,7 @@
 #include "../include/ShaderProgram.hpp"
 #include "../include/Viewer.hpp"
 #include "../include/FrameRenderable.hpp"
+#include "../include/MeshRenderable.hpp"
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 
 #include "../include/texturing/TexturedGroundRenderable.hpp"
@@ -83,11 +84,20 @@ void initialize_ground_scene(Viewer& viewer)
 
 
     //Textured Tree
-    //filename = "../textures/tree_texture.png";
-    //std::string leafFilename = "../textures/grass_texture.png";
-    //TexturedTruncRenderablePtr tronc = createTree(texShader,filename,leafFilename);
-    //viewer.addRenderable(tronc);
+    float planeRotation = (float)M_PI/7.0f;
+    glm::vec3 tv(0.0, 0.0, 0.0);
+    float tm = 1.0, tr = 2.5, ta = 0.0;
+    glm::vec3 treeOffset(0, 0, 1.0);
+    glm::vec3 treePosition(10, 10, -tan(planeRotation)*10);
 
+    filename = "../textures/tree_texture.png";
+    std::string leafFilename = "../textures/grass_texture.png";
+    ParticlePtr treeParticle = std::make_shared<Particle>(treePosition + treeOffset, tv, tm, tr, ta);
+    TexturedTruncRenderablePtr tronc = createTree(texShader, filename, leafFilename, system, treeParticle);
+    parentTransformation = glm::translate(glm::mat4(1.0), treePosition);
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(0.3, 0.3, 0.4));
+    tronc->setParentTransform(parentTransformation);
+    viewer.addRenderable(tronc);
 
     viewer.startAnimation();
 }

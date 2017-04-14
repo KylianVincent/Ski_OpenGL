@@ -9,8 +9,8 @@
 #include <SFML/Graphics/Image.hpp>
 #include <iostream>
 
-const int tailleX = 1000;
-const int tailleY = 400;
+const int tailleX = 500;
+const int tailleY = 80;
 float matriceElevation[tailleX][tailleY];
 
 void initinlizeMatriceElevation(float mat[][tailleY])
