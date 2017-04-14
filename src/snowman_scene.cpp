@@ -257,6 +257,13 @@ void initialize_snowman_scene(Viewer& viewer)
     }
     viewer.addRenderable(startingGate);
 
+    // ----------- Finish Flag --------------
+    std::string filenameFinishGate = "../textures/finish_gate.png";
+    gateParticle = std::make_shared<Particle>(glm::vec3(330.0,13.0,-tan(planeRotation)*330), gv, gm, gr, ga);
+    TexturedSlalomGatePtr finish = createGate(texShader, filenameFinishGate, pearl, system, gateParticle);
+    parentTransformation = glm::scale(glm::translate(glm::mat4(1.0), glm::vec3(330.0,0.0,-tan(planeRotation)*330)), glm::vec3(1.0,18.0,8.0));
+    finish->setParentTransform(parentTransformation);
+    HierarchicalRenderable::addChild(systemRenderable, finish);
 
     // Flocons sur piste
 //    int nombreDeFlocons = 500;
