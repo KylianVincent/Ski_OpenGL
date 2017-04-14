@@ -11,6 +11,7 @@
 class TexturedGroundRenderable : public HierarchicalRenderable
 {
 public:
+    float getMatriceElevation(int x, int y);
     ~TexturedGroundRenderable();
     TexturedGroundRenderable(ShaderProgramPtr shaderProgram, const std::string& textureFilename);
     void setMaterial(const MaterialPtr& material);

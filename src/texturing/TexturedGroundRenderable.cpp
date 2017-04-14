@@ -9,8 +9,9 @@
 #include <SFML/Graphics/Image.hpp>
 #include <iostream>
 
-const int tailleX = 300;
-const int tailleY = 50;
+const int tailleX = 1000;
+const int tailleY = 400;
+float matriceElevation[tailleX][tailleY];
 
 void initinlizeMatriceElevation(float mat[][tailleY])
 {
@@ -88,6 +89,10 @@ float Get2DPerlinNoiseValue(float x, float y, float res)
 
 }
 
+float TexturedGroundRenderable::getMatriceElevation(int x, int y){
+  return matriceElevation[x][y];
+}
+
 TexturedGroundRenderable::TexturedGroundRenderable(
         ShaderProgramPtr shaderProgram, const std::string& textureFilename)
     : HierarchicalRenderable(shaderProgram),
@@ -96,7 +101,7 @@ TexturedGroundRenderable::TexturedGroundRenderable(
 {
 
 
-  float matriceElevation[tailleX][tailleY];
+  //float matriceElevation[tailleX][tailleY];
   initinlizeMatriceElevation(matriceElevation);
   float test;
   for (int i=0; i<tailleX; i++){
